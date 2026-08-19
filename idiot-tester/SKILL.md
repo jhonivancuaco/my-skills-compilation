@@ -1,6 +1,6 @@
 ---
 name: idiot-tester
-description: Role-played usability QA testing of any system — app, website, booking site, online store, POS, HR or school portal, government site, dashboard, admin panel, or internal tool — in character as a non-technical user who can work a phone or browser fine but knows nothing about that system. Accepts any assigned persona ("as a pickleball player na magbo-book", "as a cashier", "as a bagong hire") and attempts that persona's real errand, then saves a plain-language fix list to Idiot-audit-need-to-fix.md in the workspace. Produces a confusion log ("pinindot ko yung button, hindi pala button yun"), catches misaligned design, unreadable low-contrast text, scroll traps, and "thesis defense" looking UI, ranked from blocker to nitpick. Use whenever the user invokes /idiot-tester, asks anyone to role-play or act as a user testing a system, asks for a QA, usability, or UX review, wants their design "tested as a dumb user", asks "anong pangit dito?", or just built something and wants to know what is wrong with it.
+description: Role-played usability QA testing of any system — app, website, booking site, online store, POS, HR or school portal, government site, dashboard, admin panel, or internal tool — in character as a non-technical user who can work a phone or browser fine but knows nothing about that system. Accepts any assigned persona ("as a pickleball player na magbo-book", "as a cashier", "as a bagong hire"), picks up a matching testing skill first, down a three-rung ladder that stops at the first rung that answers: a local or workspace skill where one fits (webapp-testing, ui-ux-pro-max, playwright-best-practices, web-design-guidelines, accessibility audit); only if none does, one open-source search on skills.sh and skillsmp.com to install and load; and if that finds nothing either, no skill at all — the test still runs in full. Then attempts that persona's real errand, then saves a plain-language fix list to idiot-tester/<task-test-name>.md at the workspace root — one file per errand, named after the test, updated in place on a re-test. Produces a confusion log ("pinindot ko yung button, hindi pala button yun"), catches misaligned design, unreadable low-contrast text, scroll traps, and "thesis defense" looking UI, ranked from blocker to nitpick. Use whenever the user invokes /idiot-tester, asks anyone to role-play or act as a user testing a system, asks for a QA, usability, or UX review, wants their design "tested as a dumb user", asks "anong pangit dito?", or just built something and wants to know what is wrong with it.
 ---
 
 # Idiot Tester
@@ -76,7 +76,124 @@ Look around before you start complaining. In rough priority order:
 
 If there's genuinely nothing to test, ask for one thing: a screenshot, the code, or a link. Ask once, briefly. Don't interrogate.
 
-## Step 2: Walk through it like a confused person
+## Step 2: Kumuha ng testing skill kung meron — kung wala, tuloy pa rin
+
+**Try to load a skill that already knows how to test the kind of thing in front of you.** You are playing a clueless user; the skill is the part of you that still knows how to drive a browser, what contrast actually fails at, and how big a tap target has to be.
+
+This runs **after** Step 1 on purpose: what you found decides what you need. A live URL needs something that can click. A screenshot needs an eye for spacing and contrast. Code needs a reviewer's checklist.
+
+### Tatlong baitang lang ito, at pababa — huminto sa unang sumagot
+
+| # | Baitang | Kailan ito |
+|---|---|---|
+| 1 | **Sa machine** — `~/.claude/skills/`, ang workspace na `.claude/skills/`, at ang built-in | **Laging una.** May nahanap na kaya? Tigil dito — huwag nang maghanap sa labas. |
+| 2 | **Open source** — skills.sh, skillsmp.com: hanap, install, load | **Kapag wala talagang kaya sa baitang 1.** Hindi kapag "may mas maganda siguro". |
+| 3 | **Wala nang skill — tuloy pa rin ang test** | **Kapag wala pa rin sa baitang 2.** Normal na katapusan ito, hindi kabiguan. |
+
+⛔ **Never climb past a rung that already answered.** May nahanap sa machine → tapos na ang Step 2, dumeretso na sa Step 3. Ang paghahanap sa labas kahit may local nang kayang gumawa ng trabaho ay sayang na oras at pangalawang bersyon ng meron ka na.
+
+⛔ **Never let the ladder stop the test.** Ang katapusan ng Step 2 ay palaging Step 3 — may skill man o wala.
+
+### 2a. Hanapin muna sa machine — LAGING ITO ANG UNA
+
+Two places, both local, and they cost one command each:
+
+```bash
+ls ~/.claude/skills/                 # personal — nasa lahat ng project
+ls .claude/skills/ 2>/dev/null       # workspace — itong repo lang
+```
+
+Plus the built-in skills already listed in your tools. Match what you found in Step 1 against what is there:
+
+| Anong hawak mo | I-load | Bakit |
+|---|---|---|
+| Live URL o local app na kaya mong buksan | `webapp-testing` | Playwright — pindot, screenshot, console log. Ito ang totoong hands-on na test. |
+| Live URL na mahaba ang flow (login, checkout, mobile) | `+ playwright-best-practices` | selectors, waits, auth, mobile viewport, multi-tab |
+| Screenshot o rendered na screen | `ui-ux-pro-max` | may aktwal na data ng spacing, touch target, contrast, typography — hindi hula |
+| Markup / code lang ang nakita mo | `web-design-guidelines` | binabasa ang UI code kontra sa interface guidelines |
+| "Hindi ko mabasa" — maliit, mahina ang kulay, kulay lang ang senyas | `accessibility-compliance-accessibility-audit` | WCAG contrast, keyboard, screen reader |
+| Multi-step na flow na uulitin sa re-test | `e2e-testing-patterns` | kung saan nasisira ang mahahabang flow |
+
+**Two is the ceiling.** One driver (kung paano mo hinahawakan) plus one lens (kung ano ang isinusukat mo) is the whole kit. Three skills is not a more thorough test, it is a slower one.
+
+**Reuse before install, always.** Kung may nandiyan nang kayang gumawa ng trabaho, iyon ang gamitin — huwag mag-download ng pangalawang bersyon ng meron ka na.
+
+**Say what you loaded in one line before you start**, so the person knows what the numbers in the report came from: *"Load: webapp-testing + ui-ux-pro-max."*
+
+### 2b. Wala talagang bagay? Hanap sa labas, i-install, i-load
+
+Only when **nothing** on the machine covers the kind of testing this run needs — an Electron build, a native mobile app, a PDF or printed receipt, a terminal POS, a Figma file. *"Mas maganda siguro yung iba"* is not a reason. *Walang kayang gumawa nito* is the reason.
+
+**Search — dalawang pinagkukunan, walang dina-download dito.**
+
+skills.sh, through the CLI. Its REST API is gated and answers `authentication_required` to curl — huwag mong isipin na down ito:
+
+```bash
+echo "" | npx -y skills@latest find "electron app usability testing" 2>&1 | /usr/bin/head -30
+```
+
+skillsmp.com, plain REST, no key (50/day anonymous):
+
+```bash
+curl -sS --max-time 25 \
+  "https://skillsmp.com/api/v1/skills/search?q=accessibility%20audit&limit=8&sortBy=stars" \
+  | python3 -c "import sys,json
+for x in json.load(sys.stdin)['data']['skills']: print(x['name'],'|',x.get('stars'),'|',x.get('githubUrl'))"
+```
+
+The hits sit at `data.skills`, not at the top level — `python3 -m json.tool` on the whole body just prints the envelope.
+
+Trust signal is the install count (skills.sh) or `stars` (skillsmp) — kunin ang galing sa kilalang org na libo ang install, hindi yung tatlo lang.
+
+> `head` on this Mac is the LWP HTTP tool, not the text one — it answers `Unknown option: 3`. Use `/usr/bin/head` in every pipe, or `sed -n '1,30p'`.
+
+**Install — isa lang, hindi tatlo:**
+
+```bash
+npx -y skills@latest add <owner/repo> -s <skill-name> -a claude-code -g -y --copy
+```
+
+- `-s <skill-name>` ay **hindi optional.** Kapag wala, hihintayin nito ang picker na hindi lalabas, mag-e-exit ng `0`, at walang mai-install.
+- **Check the name collision first.** It lands in `~/.claude/skills/<name>/` and shadows a same-named built-in — huwag patungan ang isang skill na gamit mo.
+- If the risk panel comes back anything other than `Safe` / `0 alerts`, **stop and say so.** Huwag i-load.
+
+**Confirm it landed** — hindi patunay ang exit code:
+
+```bash
+ls -d ~/.claude/skills/<name> && /usr/bin/head -3 ~/.claude/skills/<name>/SKILL.md
+```
+
+**Load it:** `Skill({ skill: "<name>" })`. Kung hindi pa ito nakikilala kaagad, basahin na lang ang na-download na `SKILL.md` at sundin iyon.
+
+**Isang beses lang subukan.** Isang search sa bawat pinagkukunan, isang install. Huwag ulit-ulitin ang parehong query, huwag maghanap ng pangatlo o pang-apat na pagkukunan, at huwag mag-install ng malayong-kamag-anak na skill mabawasan lang ang wala. Kapag walang nakuha sa isang pasada, baitang 3 na.
+
+### 2c. Wala pa rin? Edi wag nang gumamit ng skill — tuloy lang ang test
+
+**This is a normal ending, not a failure.** Walang nahanap sa machine, walang nahanap sa labas, 404, offline, o sablay ang install — **tapos na ang Step 2.** Huwag nang bumalik, huwag nang mag-retry sa gitna ng run, at huwag maghanap ng kapalit na skill sa Step 5 kapag nabigo ka na sa Step 2.
+
+- **Sabihin sa isang linya, tapos tuloy** — *"walang skill na bagay dito, tuloy pa rin."* Walang paumanhin, walang paliwanag kung ano ang sinubukan mo, walang listahan ng nakita mo sa search.
+- **Buo pa rin ang test.** Buong persona, buong errand, buong Step 4 na checklist, buong report, buong cleanup. Walang binabawasan, walang binabanggit na *"limitado kasi walang tool"*.
+- ⛔ **Never ask permission to carry on**, and never end the run here. *"Wala akong mahanap na skill, itutuloy ko pa ba?"* ay maling tanong — ang Step 2 ay pantulong, ang test ang trabaho.
+- ⛔ **Hindi ito dahilan para pahinain ang findings.** Bago pa nagkaroon ng anumang skill, kaya nang mahanap ng isang naguguluhang tao ang nakatagong button, ang hindi mabasang text, at ang wala nang nangyari nang pinindot. Iyon ang lens; hindi iyon nasa skill.
+- **Kapag may hindi mo talaga masukat nang walang tool** — hal. eksaktong contrast ratio o console error — huwag manghula. Ilagay sa **🤔 HINDI KO SURE** na bucket, gaya ng sinasabi ng Rule zero.
+
+### 2d. Ang skill ay kasangkapan mo — hindi siya ang tester
+
+It sharpens **what you check and how you touch the screen.** It never touches the persona, the voice, or the report.
+
+| Sa skill galing | Sa iyo pa rin galing |
+|---|---|
+| pagpindot, screenshot, console log | sino ka, anong errand mo, saan ka sumuko |
+| totoong sukat — 3.1:1 contrast, 28px na tap target | kung paano mo sasabihin: *"ang liit, hindi ko na binasa"* |
+| alin ang unahin sa mahabang flow | ang score, ang confusion log, ang **Ayusin niyo** |
+
+⛔ **Do not let it turn this into an engineer's test run.** No `spec.ts`, no test files, no CI config, no coverage report, no assertions written to disk — hindi ito ang inorder. Driving a browser with Playwright is fine; that is you tapping. Building a test suite is a different job.
+
+⛔ **A skill's rulebook never replaces Step 4, it only adds to it.** Severity comes from the persona, not from the rulebook: a WCAG note nobody would ever notice stays a nitpick, and a Book button a normal person cannot find stays a blocker even if every automated check passes.
+
+**Where it gets reported:** one line in chat after the report — *"Ginamit ko: webapp-testing + ui-ux-pro-max"* — and **never** in the `.md`. Which skill you loaded is housekeeping about your own run; walang inaayos doon (Step 6).
+
+## Step 3: Walk through it like a confused person
 
 Before listing problems, actually attempt **your persona's errand** — the specific one from Step 0, not a generic tour. Narrate the attempt in first person, beginning the moment the first screen loads: what you saw, what you guessed, what you tapped. This narrative is usually the most valuable part of the whole report, because it shows *where* someone falls off, not just *what* is ugly.
 
@@ -89,7 +206,7 @@ Stay in character while you do it. You don't know the vocabulary:
 - not "insufficient color contrast" → "grey text sa white background, kunwari nagbabasa ako, ang totoo hindi ko na binasa"
 - not "the CTA lacks visual hierarchy" → "tatlong button magkasunod magkakapareho, alin ba dapat pindutin ko"
 
-## Step 3: What an idiot notices
+## Step 4: What an idiot notices
 
 Run through these. You don't have to report on every category — only the ones where you actually found something.
 
@@ -126,9 +243,9 @@ Fixed pixel widths. Tables that will never fit. Tap targets smaller than a finge
 **Pang-opisina / internal systems (desktop, admin panels, POS, dashboards)**
 These fail differently from consumer apps — check them on their own terms. Tables with 30 columns and no way to search, filter, or sort. Pagination na "1 2 3 ... 400" na walang jump. Forms with 40 fields at nawawala lahat pag nag-error ang isa. Delete na walang undo at walang "sigurado ka ba". Menu names copied straight from database tables. Fields no one can fill because the answer isn't known yet, pero required pa rin. Workflows na 12 clicks para sa bagay na ginagawa 200 beses araw-araw — sa internal tools, bawat dagdag na click ay multiplied by the whole shift, kaya ang bagal at ang paulit-ulit ay dapat blocker-level, hindi nitpick. Walang keyboard shortcut sa data entry. Walang bulk action. Reports na hindi ma-export.
 
-## Step 4: Write the report in chat
+## Step 5: Write the report in chat
 
-This is the version the person reads right now — the story and the roast. The file in Step 5 is the version they work from later. Use this structure, and skip any section where you found nothing; an empty section is worse than no section.
+This is the version the person reads right now — the story and the roast. The file in Step 6 is the version they work from later. Use this structure, and skip any section where you found nothing; an empty section is worse than no section.
 
 ```
 # 🤡 IDIOT TESTER REPORT
@@ -193,21 +310,33 @@ decisions. If you can't find any, say that honestly instead of inventing.]
 
 The fix line should describe the *result* the person wants, not the implementation. They can figure out the code — or ask you afterward. The value here is that you noticed.
 
-## Step 5: Save the task list to the workspace
+## Step 6: Save the task list — `idiot-tester/<task-test-name>.md`
 
-After the chat report, always write a working file the person can actually check off while fixing. Save it as **`Idiot-audit-need-to-fix.md`** in whatever workspace is currently in play — the repo or project folder they're working in, or its `workspace/` subfolder if one exists. If there's no project folder at all (plain chat, artifact-only, screenshot-only), write it wherever files get delivered and tell them where it landed. Don't ask where to put it; pick the obvious place and say so in one line.
+After the chat report, always write a working file the person can actually check off while fixing. **Isang folder, isang file kada test — hindi na basta itinatapon sa root.**
+
+```
+<root ng workspace>/idiot-tester/<task-test-name>.md
+```
+
+- **`idiot-tester/` sa root ng workspace** — katabi ng `.git`, ng `package.json`, ng `README.md`. Hindi sa loob ng `src/`, hindi sa `app/` o `web/`, at hindi sa folder kung saan ka nagkataong nakatayo. Gawin ang folder kung wala pa (`mkdir -p idiot-tester`) at huwag magtanong kung saan ilalagay.
+- **`<task-test-name>` ay ang test na ginawa mo** — ang errand, hindi ang petsa at hindi ang persona. Lowercase, may gitling, 2–5 salita, plain words na kayang basahin nang malakas: `booking-a-court.md`, `checkout-with-gcash.md`, `owner-payout-console.md`, `filing-a-leave.md`, `adding-20-products.md`. ⛔ Hindi `test1.md`, hindi `2026-08-18.md`, hindi `IdiotTesterReportFinalV2.md`, at hindi na `Idiot-audit-need-to-fix.md` — iyon ang lumang paraan at hindi na ito ginagamit.
+- **Isang errand, isang file.** Dalawang magkaibang errand sa iisang session ay dalawang file — huwag pagsamahin. Pero ang **parehong errand na inulit ng ibang persona** ay iisang file pa rin: dagdag na bullet lang doon, hindi bagong file.
+- **Bago magsulat, tingnan muna ang folder** — `ls idiot-tester/ 2>/dev/null`. Kung may file na para sa errand na ito, iyon ang bubuksan at dadagdagan. Ang paggawa ng `booking-a-court-2.md` ay bug, hindi bagong test.
+- **Kapag walang project folder talaga** (plain chat, artifact lang, screenshot lang), gawin pa rin ang `idiot-tester/` kung saan naman naihahatid ang files, at sabihin sa isang linya kung saan ito napunta.
+
+Sabihin ang buong path sa isang linya pagkatapos — `idiot-tester/booking-a-court.md, 11 items` — para alam agad kung saan pupunta.
 
 This file is a different genre from the chat report: **no roast, no jokes, no emojis, no drama.** Someone will open it at 2am with the code in the other window. Every line has to be a task they can act on.
 
 ### ⛔ ONLY THINGS THAT NEED FIXING GO IN THIS FILE
 
-**The file is called `need-to-fix`, and that is literally all it holds.** Every line must be a broken thing somebody has to go and repair. If a line does not describe something to fix, it does not belong — cut it, however true or interesting it is.
+**The file holds the fix list for one errand and literally nothing else.** Every line must be a broken thing somebody has to go and repair. If a line does not describe something to fix, it does not belong — cut it, however true or interesting it is.
 
 Test every line before you write it: **may aayusin ba dito?** Hindi → labas.
 
 ⛔ **These never go in the file**, not even as their own section at the bottom:
 
-- **Housekeeping about your own test run** — what dummy data you created, what you cleaned up, what got refunded, which account you used, which files you compared. Walang inaayos doon. Sabihin mo sa chat.
+- **Housekeeping about your own test run** — what dummy data you created, what you cleaned up, what got refunded, which account you used, which files you compared, **and which skills you loaded or installed in Step 2**. Walang inaayos doon. Sabihin mo sa chat.
 - **Things that turned out fine.** You checked, it was correct — that is not a task. Never write "verified the countdown ticks correctly" or "no double-booking, the button disables properly". Praise lives in the chat report's ✅ section only.
 - **Things the person already said are intentional.** The moment they say *"ganon talaga yon"*, it comes out of the file and never comes back in a later run.
 - **Notes to yourself**, open questions, "worth discussing", "we should decide", redesign ideas, or anything phrased as a decision for them to make.
@@ -220,7 +349,7 @@ The only softening allowed is the `(not sure, wasn't able to check)` tag below �
 **Structure:**
 
 ```markdown
-# TASK TO DO
+# TASK TO DO — <ang errand, kapareho ng pangalan ng file>
 
 ## <screen or feature name, in plain words>
 
@@ -242,7 +371,7 @@ The only softening allowed is the `(not sure, wasn't able to check)` tag below �
 - **Still no jargon.** Not "insufficient contrast ratio" but "text is too light against the white background, hard to read". Not "z-index conflict" but "the chat bubble covers the Submit button, can't tap it".
 - **Flag the unverified ones plainly.** If you couldn't confirm something, put `(not sure, wasn't able to check)` at the end of that bullet rather than dropping it or overstating it.
 
-**On re-tests, update the file instead of replacing it.** Keep it as a living list: mark fixed items as done rather than deleting them, so the person can see progress and you can both tell whether a fix actually worked.
+**On re-tests, open the same file and update it — never write a new one.** Same errand means the same `<task-test-name>.md`, so check `idiot-tester/` before you write. Keep it as a living list: mark fixed items as done rather than deleting them, so the person can see progress and you can both tell whether a fix actually worked.
 
 ```markdown
 * ~~date field chevron icon misaligned~~ (fixed, verified)
@@ -250,7 +379,7 @@ The only softening allowed is the `(not sure, wasn't able to check)` tag below �
 
 Then add any new findings under their screen. A to-do file that resets every run is just a report; one that accumulates is a project.
 
-## Step 6: Clean up everything you created
+## Step 7: Clean up everything you created
 
 **Anything you made while testing, you delete before the run ends.** Bookings, orders, accounts, games, sessions, series, posts, uploads, messages, comments, tickets, rows in a table — if it was not there before you started, it does not stay. This is not optional and it is not a thing to ask permission for; it is the last step of the test, same as the report.
 
@@ -262,7 +391,7 @@ Then add any new findings under their screen. A to-do file that resets every run
 
 **Verify each deletion, don't assume it worked.** Reload the list and look. Where the system has an API you can read, check there too — a row that vanishes from a screen is not always gone from the database.
 
-**All of this is reported in the chat, never in the `.md`.** Cleanup is housekeeping about your own run — nobody has to fix it, so it does not get a line, a bullet, or a section in the fix file. See the rule in Step 5.
+**All of this is reported in the chat, never in the `.md`.** Cleanup is housekeeping about your own run — nobody has to fix it, so it does not get a line, a bullet, or a section in the fix file. See the rule in Step 6.
 
 **When something genuinely cannot be deleted, say so plainly** in the chat report, with the state you left it in and why. A cancelled-but-undeletable record is an acceptable end state *if the product has no delete path* — "I forgot" and "I didn't want to bother" are not. That missing delete path is itself a real finding and it does belong in the `.md`: put it under the screen it came from, written as the bug it is ("an organizer can never remove a series from their own console"), not as a note about your test run.
 
@@ -282,6 +411,6 @@ Keep the tantrum in the complaint line and the clarity in the "Ayusin niyo" line
 
 ## After the report
 
-Confirm in one line that everything you created is deleted (or, if something could not be, exactly what is still there and why). Point to the file — where it is and how many items are in it — then offer one of these: walk through the top fix, re-test after they patch things, or run the same errand again as a *different* persona. A rushing teenager and a cautious tita fail on completely different things in the same system, so a second run is often cheaper than a redesign.
+Confirm in one line that everything you created is deleted (or, if something could not be, exactly what is still there and why), and name the skill you tested with in the same breath — *"Ginamit ko: webapp-testing + ui-ux-pro-max. Lahat ng ginawa ko, burado na."* If none fitted and none could be installed, say that instead, in one line, without excuses. Point to the file by its full path — `idiot-tester/<task-test-name>.md` — and how many items are in it, then offer one of these: walk through the top fix, re-test after they patch things, or run the same errand again as a *different* persona. A rushing teenager and a cautious tita fail on completely different things in the same system, so a second run is often cheaper than a redesign.
 
 Don't append a lecture on design principles — you're an idiot, remember. You don't know why it's bad. You just know you couldn't use it.

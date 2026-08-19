@@ -17,10 +17,11 @@ much is done and how close it is to finishing.
 - Applies to every project, every agent and subagent, and to small one-liners
   too — a trivial task just goes straight to `**Progress: 100%**`.
 - **Read-only work counts too.** Reading a file, a grep/search, a `ls`, a
-  `git status`, a curl, any bash command, a question answered with no edit at
-  all — it still gets a percentage. "Nothing was changed" is not a reason to
-  skip it. (Report-writing is the only thing that skips on no-change; the
-  percentage never skips.)
+  `git status`, a curl, any bash command done as part of a task — it still gets
+  a percentage. "Nothing was changed" is not a reason to skip it.
+  (Report-writing is the only thing that skips on no-change.) The **only** thing
+  that skips the percentage entirely is a pure question — see the exception at
+  the end of this section.
 - **After EVERY tool run — Read, Bash, Grep, and Edit/Write just the same.**
   Editing is not exempt: an Edit applied, a Write, a file created or deleted —
   say the new percentage right after. The next thing said to the user always
@@ -29,10 +30,31 @@ much is done and how close it is to finishing.
   saying nothing and only give a percentage at the very end. Mid-edit is exactly
   where it's needed — e.g. `**Progress: 45%** — 3 of 7 files edited, build and
   deploy still to go.` Say it as you go, not once at the finish.
-- **A one-shot read or command is `**Progress: 100%**`** — answer the question,
-  lead with 100%, done. Don't invent stages to pad it out.
+- **A one-shot read or command that is part of a task is `**Progress: 100%**`**
+  — do it, lead with 100%, done. Don't invent stages to pad it out.
 - **No message without a percentage.** If in doubt, put one. A message that
-  reports, answers, asks or explains always opens with `**Progress: N%**`.
+  reports, asks or explains a piece of work always opens with `**Progress: N%**`.
+
+### ⛔ THE ONE EXCEPTION — puro tanong lang gets NO percentage
+**When the user only asked something and nothing in any project was changed,
+do NOT open with a percentage at all.** Just answer. A percentage on a plain
+answer is noise — there is no task to be a fraction of.
+
+- Covers every kind of question: *"ano to?"*, *"bakit ganito?"*, *"tama ba?"*,
+  *"anong ilalagay ko?"*, *"how does X work?"*, *"which one is better?"*,
+  and the same asked in English, Tagalog or Taglish.
+- **Still no percentage even if you ran commands to answer it** — a `cat`, a
+  `grep`, a `curl`, a `git log`. Reading in order to answer is not a task.
+- **Still no percentage on a follow-up question** about work already finished.
+- **The percentage comes STRAIGHT BACK the moment there is work**: an edit, a
+  file written, a build, a deploy, a commit — or a question that carries an
+  order with it (*"bakit ganito, ayusin mo"*). That is a task, and every task
+  reports its percentage exactly as the rest of this section says.
+- **If any task in the session is still open, the percentage stays** — even on
+  a question. There is real work outstanding and it must remain visible.
+
+The test in one line: **did I change anything, or is anything still owed?**
+No to both → answer plainly, no percentage. Yes to either → percentage leads.
 
 ## SFTP/scp deploy — the full order of work, start to finish
 **Applies ONLY when the workspace is an SFTP/scp one** — files live on a server
@@ -383,8 +405,94 @@ existing one genuinely doesn't fit, extend it rather than forking a lookalike.
 **Consistency is checked on screen, not in the diff.** Open both screens at 100%
 zoom side by side before calling it done.
 
+## 🔴 WALANG MAGDIDIKIT — minimum 10px na espasyo sa LAHAT ng gilid
+**Bawat item sa screen ay may hindi bababa sa 10px na malinis na espasyo sa
+APAT na gilid — top, bottom, left at right.** Button, text, heading, card,
+section, popup, modal, badge, input, icon, list row, image, table — lahat.
+Walang magbabanggaan, walang magdidikit: hindi sa katabi nito, at hindi sa
+gilid ng lalagyan nito.
+
+- **10px ang SAHIG, hindi ang target.** Dahil ang spacing scale ay 4/8, ang
+  pinakamaliit na aktwal na gagamitin ay **12px** (`gap-3`, `p-3`), at 16px ang
+  normal. Ang 8px ay **kulang na** para maghiwalay ng dalawang magkaibang item —
+  dati itong sapat, hindi na. Mas malaki kaysa 10px ay laging pwede; mas maliit,
+  hindi kailanman.
+- **Padding muna, margin huli.** Ang espasyo ay ginagawa ng **padding ng
+  lalagyan** at ng **`gap`** ng flex/grid — hindi ng margin ng bawat anak.
+  Ang margin ay nagko-collapse, nadadaanan ng overflow at nawawala kapag
+  nag-wrap ang layout; ang padding hindi. Gamitin lang ang margin kung
+  talagang walang lalagyan na pwedeng bigyan ng padding.
+- **Card sa loob ng card — dito ito madalas masira.** Ang panloob na card ay may
+  sariling espasyo mula sa loob na gilid ng main card: **12–16px sa lahat ng
+  gilid, kasama ang left at right.** Ibig sabihin ang main card ay may padding,
+  at ang listahan sa loob niya ay may `gap` — hindi `p-0` na naka-full-bleed ang
+  laman. Ang panloob na card na dikit sa kaliwa't kanang gilid ng main card ay
+  BUG, hindi style.
+- **Lahat ng apat na gilid, hindi lang yung napapansin.** Karaniwang nakakalimutan:
+  ang huling row bago ang ilalim ng card, ang badge sa kanang dulo ng header,
+  ang icon na dikit sa text, ang unang item pagkatapos ng section title, at ang
+  sticky footer na tumatakip sa huling row (bigyan ng bottom padding ang listahan).
+- **Popup, modal, bottom sheet, toast, dropdown, tooltip.** Ang laman ay may
+  padding mula sa gilid ng panel, at ang panel ay may espasyo mula sa gilid ng
+  screen — hindi edge-to-edge maliban kung sinadyang full-screen sheet. Ang
+  close button ay hindi dumidikit sa title.
+- **Sa 375px din, hindi lang sa desktop.** Doon unang nagbabanggaan ang mga item.
+  Walang horizontal scroll, walang naiipit na text sa gilid.
+- **Isang bagay lang ang exception:** ang icon at ang sarili niyang label sa loob
+  ng iisang button/chip ay **isang item**, hindi dalawa — hindi sila hinahati ng
+  10px. Ang patakaran ay para sa magkaibang item at sa item kontra sa gilid ng
+  lalagyan nito.
+
+**Check bago sabihing tapos:** buksan ang totoong screen sa 100% zoom, tapos sa
+375px. Kung may dalawang bagay na halos magkadikit — o may dumidikit sa gilid ng
+card, panel o screen — hindi pa tapos.
+
+### Bago hawakan ang anumang design, mag-load ng design skill
+Anumang UI/visual na trabaho — bagong screen, component, modal, page, email —
+**nagsisimula sa pag-load ng design skill**, hindi sa pagsusulat ng markup.
+
+- **Nasa machine na ito ang `ui-ux-pro-max`** — iyon ang default:
+  `Skill({ skill: "ui-ux-pro-max" })`. May searchable dito na spacing, touch
+  target, contrast, typography at layout na panuntunan — gamitin, huwag manghula.
+- Kung may mas bagay na skill sa mismong trabaho (`frontend-design`,
+  `web-design-guidelines`, `tailwind-design-system`), pwede iyon — basta may
+  na-load na design skill bago magsimula.
+- **Kung talagang walang bagay na skill sa machine**, maghanap ng open-source
+  (skills.sh, skillsmp.com), i-install, tapos gamitin. Kung bigo ang install,
+  sabihin sa isang linya at ituloy ang trabaho gamit ang mga patakaran dito —
+  huwag itigil ang task.
+- **Huwag mag-install kung meron nang kayang gumawa ng trabaho** — gamitin ang
+  nandiyan na. (DRY, tingnan ang *How the work is done* sa ibaba.)
+
 ## Stay on task — no extras
 Do ONLY what the task asks. No unrelated work: no unprompted refactors, side fixes, extra explorations, or "while I'm here" improvements. Off-task thinking and work is slow and burns too many tokens. Before reading files, searching, or editing, check the action is directly needed for the current task; skip broad exploration when the target is already known. If something unrelated looks worth fixing, mention it in one sentence at the end instead of doing it.
+
+## How the work is done — focused, agile, DRY, no over-engineering
+These four are one habit: **the smallest correct thing that fully does the job.**
+
+- **Focus — only the task, never a side job.** One task at a time, and nothing
+  beside it. No unprompted refactor, no "while I'm here" cleanup, no tidying a
+  file you only opened to read. If it is not needed to finish what was asked,
+  it does not get done — mention it in one line at the end instead.
+  (The full rule is *Stay on task — no extras* above; this is the same rule.)
+- **Agile — ship a small working slice, then the next.** Do the thing that works
+  end-to-end first, verify it, move on. No big-bang rewrites, no half-built
+  scaffolding left behind, no "phase 2" that never lands. Every step leaves the
+  project in a working state.
+- **DRY — never write a second version of something that exists.** Look for the
+  existing component, helper, token, style or endpoint FIRST and reuse it. If it
+  almost fits, extend it; do not fork a lookalike. Copy-paste with two lines
+  changed is the bug this rule exists to stop.
+- **Don't overthink.** Take the obvious solution. No listing three options when
+  one is clearly right, no exploring the whole repo for a one-file change, no
+  long deliberation before a small edit. Decide, do it, verify.
+- **Don't over-engineer.** No abstraction layer for one caller, no config option
+  nobody asked for, no future-proofing for a requirement that does not exist, no
+  new dependency or pattern when plain code does it. Build for today's ask.
+
+**The test before writing anything:** *is this needed to finish the task, and
+does it already exist somewhere?* If it isn't needed — skip it. If it exists —
+reuse it.
 
 ## "Anong ginagawa nito?" — answer plainly, as a numbered-feel bullet list
 When the user asks **what something is or what it does**, the answer is written
@@ -438,7 +546,10 @@ technical version, give that instead; this rule is about the DEFAULT.
 **Match the user's language.** Tagalog question → Tagalog answer. English
 question → English. Taglish → Taglish. The simplicity rule holds either way.
 
-**The percentage still leads the message**, exactly as always — then the bullets.
+**No percentage on this one** — it is a question, not a task, so the answer
+opens straight with the bullets. (See the exception in the percentage rule
+above.) If the same message also reports work you did, the percentage leads as
+normal.
 
 ## Tanong lang = sagot lang — huwag mag-trabaho, huwag mag-overthink
 Kapag **nagtatanong lang** ang user, ang sagot ay **sagot**. Walang kasamang
@@ -458,7 +569,9 @@ trabaho, walang paghahanap ng ibang gagawin, walang mahabang paliwanag.
   gawin. Hintayin ang "sige, gawin mo".
 - **Kung talagang hindi alam**, sabihin agad na hindi alam at kung ano ang
   kailangang tingnan — huwag mag-hula ng mahaba.
-- Ang percentage ay `**Progress: 100%**` kaagad — tapos na ang trabaho, sinagot na.
+- ⛔ **Walang percentage.** Tanong lang ito — walang trabahong sinusukat, kaya
+  huwag mag-`**Progress: 100%**`. Diretso na sa sagot. (Kapag may kasamang
+  utos ang tanong, o may bukas pang task sa session, balik ang percentage.)
 
 **Kailan ito hindi applicable:** kapag may utos na kasama ang tanong ("bakit
 ganito, ayusin mo") — trabaho na yun, sundin ang normal na rules.

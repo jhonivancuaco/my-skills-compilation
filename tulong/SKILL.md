@@ -1,6 +1,6 @@
 ---
 name: tulong
-description: Ask the user what they want to do, draft the plan, rank every skill on this machine (workspace, personal, plugin, built-in), search skills.sh and skillsmp.com only when nothing on the machine can do the job at all, show the install candidates as tickboxes and download only the ticked ones, then show the whole shortlist as tickboxes so the user can uncheck any, auto-load the ones kept, confirm, then do the work straight — only the task, no side jobs, no overthinking, no over-engineering, and reuse what already exists instead of writing a second version. Use when Ivan types /tulong, asks "anong skill ang gamitin", "anong pwede mong gawin", "which skill should I use", "tulungan mo ako", "help me pick a skill", "ano bang magagawa mo", or describes a task without naming any tool.
+description: Ask the user what they want to do, draft the plan, rank every skill on this machine (workspace, personal, plugin, built-in), then ALWAYS search the open-source world too — skills.sh, skillsmp.com, GitHub, awesome lists, the open web, wherever skills are published — and suggest anything found that is not installed yet, show the install candidates as tickboxes and download only the ticked ones, then show the whole shortlist as tickboxes so the user can uncheck any, auto-load the ones kept, confirm, then do the work straight — only the task, no side jobs, no overthinking, no over-engineering, and reuse what already exists instead of writing a second version. Use when Ivan types /tulong, asks "anong skill ang gamitin", "anong pwede mong gawin", "which skill should I use", "tulungan mo ako", "help me pick a skill", "ano bang magagawa mo", or describes a task without naming any tool.
 ---
 
 # Tulong — tanong, plano, hanap ng skill, tickbox, tapos gawin
@@ -10,7 +10,7 @@ Eight beats, in order. Do not skip one and do not reorder them.
 1. **Tanong** — anong gusto mong gawin?
 2. **Plano** — how it will be done, written out before any skill is picked.
 3. **Local sweep** — every skill on this machine, ranked.
-4. **Remote hunt** — only if **walang talagang magamit** locally, search skills.sh + skillsmp.com. Skipping is the normal outcome. **Search only — install nothing yet.**
+4. **Remote hunt** — **LAGING TUMATAKBO, walang kondisyon.** Search the open-source world, not one or two registries. Anything found that is not on the machine gets suggested. **Search only — install nothing yet.**
 5. **Tickbox ng iinstall** — the install candidates, uncheckable; only the ticked ones get downloaded.
 6. **Tickbox ng gagamitin** — the full shortlist, uncheckable.
 7. **Auto-load** — load the kept ones into this session, **plus `verification-before-completion` always** (never a tickbox).
@@ -55,8 +55,10 @@ Ito ang bawal, sa bawat step ng flow na ito:
 task ay padding — tanggalin bago pa ipakita. Mas maikling plano na tumpak ang mas
 mahusay kaysa mahabang plano na kumpleto sa "baka".
 
-**Sa step 3–4 (hanap ng skill):** isang ranking run. Hindi limang variation ng
-query para "sigurado". Kung malinaw na ang match sa unang takbo, tapos na.
+**Sa step 3–4 (hanap ng skill):** isang ranking run sa loob, isang pasada sa
+labas. Hindi limang variation ng query para "sigurado". Oo, obligado ang remote
+hunt — pero isang pasada lang iyon, hindi imbestigasyon. Ang paghahanap ay
+mabilis at libre; ang pag-install ang may bigat, at may sariling tickbox iyon.
 
 **Sa step 7–8 (gamit ng skill):** ⚠️ **ang naka-load na skill ay hindi lisensya
 para lumaki ang trabaho.** Marami sa kanila ay may mahabang checklist —
@@ -210,46 +212,68 @@ lumabas ito sa ranking — at madalas lumalabas, dahil halos lahat ng task ay ma
 pinipili; **laging naka-load** (tingnan ang step 7). Ang paglalagay nito sa
 tickbox ay nagbibigay ng ilusyon na pwedeng i-off — hindi pwede.
 
-## 4. Kulang? Hanap sa labas — HANAP LANG, WALA PANG INSTALL
+## 4. Hanap sa labas — LAGING TUMATAKBO, HANAP LANG, WALA PANG INSTALL
 
-**Ang default ay HUWAG.** There are ~84 skills on this machine already. Skipping
-this step is the normal outcome, not a failure — most of the time the local sweep
-has the answer and step 4 is three seconds of judgment, not a search.
+**Obligado ito at walang kondisyon.** Tumatakbo ang step na ito sa **bawat** run
+ng `/tulong` — kahit mukhang perpekto na ang local sweep, kahit mataas ang score
+ng #1, kahit halatang kaya na ng nasa makina. Walang "skip", walang "hindi na
+kailangan", walang "sapat na ang local".
 
-**Go remote only when there is genuinely nothing usable** — walang magandang
-match, as in *walang talagang magamit* para sa task. Both of these must be true:
+**Bakit.** Ang mga skill sa makinang ito ay litrato ng isang araw. Ang
+open-source na mundo ay gumagalaw araw-araw — pwedeng may skill na mas bagay sa
+task kaysa sa pinakamalapit na nasa disk, at hindi mo iyon malalaman kung hindi
+ka titingin. Libre at mabilis ang tingin; ang hindi pagtingin ang mahal, dahil
+hindi mo nakikita ang na-miss mo.
 
-1. **Nothing local can do the work.** Not "hindi perfect" — cannot be used at
-   all. The tell: top score under ~8 **and** the `why:` lines on the top matches
-   are stray-token noise (one word hit, and it hit the wrong sense) rather than
-   real overlap with the plan.
-2. **A named plan step is left with nothing to carry it out** — a framework, a
-   service, a file format, a protocol that nothing on disk knows anything about.
+**Tatlong linya ang buong step:**
 
-If either one fails, **do not go remote.** Say in one line that the local set
-covers it, and go straight to step 6. No install tickbox is shown when there is
-nothing to install — do not ask an empty question.
+1. **Hanapin** — sa buong open source, hindi sa isa o dalawang registry.
+2. **Isuggest ang bago** — anumang nahanap na **wala pa sa makina** ay pumapasok
+   sa listahan ng kandidato sa step 5, kahit may maayos nang local match.
+3. **Walang ini-install dito** — ang tickbox ng step 5 ang nag-iinstall.
 
-### Hindi ito dahilan para mag-remote
+> ⛔ **Walang na-download sa step na ito.** Hanap, basahin ang resulta, gumawa ng
+> listahan ng kandidato. Ang `add` at `curl -o` ay nasa step 5 at tumatakbo lang
+> pagkatapos tumik ni Ivan. Ang install bago ang tickbox ay bug sa flow, hindi
+> shortcut.
 
-| Situation | Why it is not a trigger |
+### Saan hahanap — LAHAT ng kilalang pinagkukunan, hindi dalawang site lang
+
+⛔ **Hindi sapat ang skills.sh at skillsmp.** Iyon ang dalawang registry na may
+sariling API, kaya sila ang pinakamadaling tawagan — at iyon lang ang dahilan.
+Hindi sila ang mundo. **Ang buong Tier 1 sa ibaba ay tinatakbo sa bawat run.**
+
+#### Tier 1 — obligado, lahat ng ito, bawat run
+
+| Pinagkukunan | Paano | Bakit hindi pwedeng laktawan |
+|---|---|---|
+| **GitHub repo search** | `api.github.com/search/repositories?q=…` — anonymous, ~10 req/min | **Ito ang pinaka-produktibo, malayo.** Dito nakita ang `rshankras/claude-code-apple-skills` (641★) at `conorluddy/ios-simulator-skill` (1219★) na wala sa kahit aling registry |
+| **GitHub topics** | `q=topic:claude-skill`, `topic:claude-skills`, `topic:agent-skills`, `topic:claude-code-skills`, `topic:claude-code-plugin` | Ang tamang-tag na repo ay hindi laging tumatama sa keyword search |
+| **Anthropic mismo** | hanapin ang `anthropics/skills` at ang skills sa loob ng `anthropics/claude-code` | Official, pinakamataas ang tiwala. Tignan ang pangalan bago i-assume — nagbabago ang layout |
+| **skills.sh** | `npx skills find` — may install counts | Install count ang pinakamalinaw na trust signal |
+| **skillsmp.com** | plain REST, may stars | Iba ang index nito sa skills.sh, kaya iba ang nahahanap |
+| **Awesome lists** | hanapin sa GitHub ang `awesome claude code` / `awesome claude skills`, tapos i-raw ang README | Dito mauna ang bago bago pa ito ma-index ng registry |
+| **Claude Code plugin marketplaces** | `/plugin marketplace add <owner/repo>` — ang plugin ay may kargang skills | Maraming skill ay naka-bundle sa plugin, hindi naka-solo |
+| **Ang bukas na web** | `WebSearch` — `"claude skill" SKILL.md <topic> site:github.com` | Para sa wala sa alinmang registry |
+
+#### Tier 2 — tignan kapag manipis ang nakuha sa Tier 1
+
+| Pinagkukunan | Paano |
 |---|---|
-| May match, hindi lang perfect | A usable local skill beats a downloaded specific one every time — it is already trusted, already read, already on disk. |
-| Generic skill covers it loosely | `api-design-principles` on a webhook task is a real, working match. "Mas bagay sana kung may dedicated" is a wish, not a gap. |
-| Mababa ang score pero tama naman ang `why:` | Score is a keyword heuristic. A score-7 skill whose `why:` genuinely describes the plan is a match; trust the `why:`, not the number. |
-| Gusto ng pang-second opinion / reviewer | `/code-review`, `/security-review` and `/simplify` are built in and always available. |
-| Ordinary code work — read, edit, fix, test | **No skill is needed at all.** This is the most common case by far. Doing the task directly is the right answer, not a gap to fill by shopping. |
-| Gusto lang tignan kung may mas maganda | Curiosity is not a trigger. Ivan can ask for a search outright if he wants one. |
+| **npm** | `npm search "claude skill <topic>"` — may naka-package bilang npm module |
+| **Template/aggregator sites** | `claude-code-templates` at kauri — nagko-collect ng skills, agents at commands |
+| **MCP registries** | smithery.ai, mcp.so, PulseMCP, Glama — kadalasan may kasamang skill ang MCP server |
+| **Hugging Face** | may collections ng agent skills |
+| **Community** | Reddit `r/ClaudeAI`, X, Discord — sa `WebSearch`, dito lumalabas ang pinakabago |
 
-**"Walang skill" is a perfectly good answer.** If nothing local fits and the
-remote hunt also turns up nothing worth installing, say so plainly and run the
-plan directly. A downloaded bad match is worse than no skill — it is a file on
-Ivan's machine that runs with full agent permissions and does not even help.
+**Ang panuntunan ay saklaw, hindi bilang.** Hindi na "dalawa ang minimum" —
+**lahat ng Tier 1.** Tigil lang kapag pare-parehong pangalan na ang lumalabas sa
+tatlo o higit pang pinagkukunan; iyon ang senyales na naabot na ang dulo. Kapag
+may pinagkukunang bumagsak (down, 429, nag-error ang CLI), **sabihin kung alin at
+ituloy ang iba** — hindi ito dahilan para maging dalawa ang natakbo.
 
-> ⛔ **Nothing is downloaded in this step.** Search, read the results, build a
-> candidate list. The `add` and `curl -o` commands live in step 5 and run only
-> after Ivan has ticked. An install that happens before the tickbox is a bug in
-> the flow, not a shortcut.
+**Bagong registry na lumitaw bukas ay kabilang dito.** Ang listahang ito ay hindi
+limitasyon — ito ang kilala ngayon. Kung may bago, idagdag sa Tier 1 at gamitin.
 
 ### skills.sh — `npx skills find`
 
@@ -282,17 +306,81 @@ Each hit carries `name`, `description`, `author`, `stars`, `githubUrl` (a GitHub
 **tree** URL) and `skillUrl`. Optional params: `page`, `category`, `occupation`,
 `language`, `sortBy=stars|recent`.
 
+### GitHub — repo search, walang token na kailangan
+
+```bash
+curl -sS --max-time 20 \
+  "https://api.github.com/search/repositories?q=claude+skill+stripe+webhook&sort=stars&per_page=8" \
+  | python3 -c "import json,sys;[print(r['stargazers_count'], r['full_name'], (r['description'] or '')[:70]) for r in json.load(sys.stdin)['items']]"
+```
+
+- **Repo** search answers anonymously (~10 requests/min). **Code** search does
+  not — it needs a token, and there is no `gh` CLI on this Mac. Build the hunt on
+  repo search plus raw `SKILL.md` fetches, not on `gh search code`.
+- A hit is only a candidate once its `SKILL.md` has been seen:
+  `curl -sSL --max-time 20 https://raw.githubusercontent.com/OWNER/REPO/main/SKILL.md | /usr/bin/head -20`
+  — a collection keeps them at `skills/<name>/SKILL.md` instead of the root.
+- Stars are the trust signal here, the way install counts are on skills.sh.
+
+### Awesome lists at ang bukas na web
+
+Curated collections carry the newest skills before either registry indexes them.
+Find the list itself on GitHub (`awesome claude skills`), open its README raw,
+and read the table.
+
+For a task neither registry knows, `WebSearch` is the last pass — e.g.
+`"claude skill" SKILL.md <framework> site:github.com`. What comes back is almost
+always a repo; vet it exactly like a GitHub hit above.
+
+⚠️ **Mas malawak ang hanap, mas mahigpit ang pagsala.** Ang galing sa registry ay
+dumaan man lang sa isang listahan; ang galing sa raw na web ay wala. Bago
+isuggest ang isang bagay na walang install count at walang stars, **basahin ang
+`SKILL.md` nito.** Hindi mabasa → hindi ito pumapasok sa tickbox.
+
+### Ano ang isinusuggest — at ano ang hindi
+
+**Ang panuntunan:** nahanap at **wala pa sa makina** → kandidato sa step 5.
+Nahanap pero **naka-install na** → hindi na ito bagong install; kung bagay sa
+task, dumidiretso ito sa shortlist ng step 6.
+
+Pero ang pagiging kandidato ay hindi awtomatikong `(Recommended)`. Sa mga ito,
+**ipinapakita pa rin ito sa tickbox pero hindi inirerekomenda** — nakikita ni
+Ivan, siya ang bahalang tumik:
+
+| Sitwasyon | Bakit hindi ito `(Recommended)` |
+|---|---|
+| May local match na, hindi lang perpekto | A usable local skill beats a downloaded specific one — it is already trusted, already read, already on disk. Ipakita ang bago; huwag itulak. |
+| Generic na local skill ang sumasaklaw | `api-design-principles` on a webhook task is a real, working match. "Mas bagay sana kung may dedicated" is a wish, not a gap. |
+| Mababa ang score pero tama naman ang `why:` | Score is a keyword heuristic. A score-7 skill whose `why:` genuinely describes the plan is a match; trust the `why:`, not the number. |
+| Gusto ng pang-second opinion / reviewer | `/code-review`, `/security-review` and `/simplify` are built in and always available. |
+| Ordinary code work — read, edit, fix, test | **No skill is needed at all.** This is the most common case by far. Doing the task directly is the right answer. |
+| Walang install count, walang stars, hindi mabasa ang `SKILL.md` | Hindi lang ito hindi rekomendado — **hindi ito kandidato.** Huwag isama. |
+
+**"Walang sulit i-install" ay tamang sagot, at madalas ito ang tama.** Laging may
+nahahanap ang malawak na search; hindi lahat ng nahanap ay dapat mapunta sa
+makina ni Ivan. Kung wala talagang sulit, sabihin sa isang linya kung ano ang
+nakita at bakit walang pumasok, laktawan ang tickbox ng step 5, at dumiretso sa
+step 6. Ang masamang match na na-download ay mas malala kaysa walang skill — file
+iyon sa makina ni Ivan na tumatakbo nang buong agent permissions at hindi pa
+nakakatulong.
+
+⛔ **Ang obligadong hanap ay hindi obligadong install.** Magkaiba ang dalawa, at
+ang paghalo sa kanila ang pinakamadaling paraan para mapuno ng basura ang
+`~/.claude/skills/`. Hanap: laging. Install: kapag tinikan lang.
+
 ### Build the candidate list
 
 Shortlist **at most 4** — that is one tickbox question, and more than a handful
 of new skills for one job means the plan is too broad, not that the machine is
-short of skills. For each candidate, note down what step 5 has to show:
+short of skills. A search this wide will often return more than four worth a
+look; cut to the best four and say in one line what was dropped.
 
 | Field | Where it comes from |
 |---|---|
-| name | `owner/repo@skill`, or skillsmp's `name` |
-| source | `skills.sh` or `skillsmp` |
-| trust | install count (skills.sh) or `stars` (skillsmp) |
+| name | `owner/repo@skill`, skillsmp's `name`, or the repo's skill directory |
+| source | `skills.sh`, `skillsmp`, `github`, `web` |
+| trust | install count (skills.sh), `stars` (skillsmp / GitHub), or **the `SKILL.md` you read** when it has neither |
+| naka-install na? | already on disk → **not** an install candidate; it goes straight to step 6 |
 | why | the numbered plan step it serves |
 | collision | does `ls ~/.claude/skills` or the built-in list already hold this name? |
 
@@ -341,7 +429,8 @@ npx -y skills@latest add <owner/repo> -s <skill-name> -a claude-code -g -y --cop
   back anything other than `Safe` / `0 alerts`, **stop and tell Ivan** — the tick
   was consent to install a skill believed clean, not consent to a flagged one.
 
-**skillsmp.com** — turn the tree URL into a raw URL and fetch the `SKILL.md`:
+**skillsmp.com, GitHub at web** — turn the tree URL into a raw URL and fetch the
+`SKILL.md`:
 
 ```
 https://github.com/OWNER/REPO/tree/BRANCH/path/to/skill
@@ -461,10 +550,11 @@ wrong as one that ships three.
 No preamble before starting — the plan was already shown and approved at this
 point, so restating it is dead air. Start at step 1 of the plan and go.
 
-If the shortlist came back empty, or nothing local fitted and the remote hunt was
-skipped or found nothing worth installing, say so plainly and run the plan
-directly with no skill loaded. A forced bad match is worse than none, and doing
-the work with no skill at all is the ordinary case — not an admission of failure.
+If the shortlist came back empty — nothing local fitted, and the remote hunt,
+which always runs, found nothing worth installing — say so plainly and run the
+plan directly with no skill loaded. A forced bad match is worse than none, and
+doing the work with no skill at all is the ordinary case, not an admission of
+failure.
 
 ---
 
@@ -477,7 +567,17 @@ the work with no skill at all is the ordinary case — not an admission of failu
 - **Two tickboxes, and neither substitutes for the other.** Step 5 gates the
   download, step 6 gates the use. Installing something Ivan unticked at step 5 is
   the worst failure this skill has, because it puts a file on his machine he said
-  no to. Searching is free; downloading is not.
+  no to. Searching is free and obligatory; downloading is neither.
+- **The remote hunt has no off switch.** It is not gated on the local score any
+  more — a perfect local match still gets a search run beside it. What a strong
+  local match changes is the *recommendation*, never whether you look.
+- **GitHub repo search is anonymous; code search is not.**
+  `/search/repositories` answers without a token at ~10 req/min;
+  `/search/code` returns 401, and `gh` is not installed on this Mac. Do not
+  design the hunt around a CLI that is not there.
+- **A hit is not a candidate until its `SKILL.md` has been read.** A registry hit
+  carries a trust number; a repo off a web search carries nothing at all. Unread
+  and untrusted means it never reaches the tickbox.
 - **Do not ask an empty tickbox.** No remote candidates → skip step 5 entirely and
   go to step 6. A question with nothing worth ticking reads as a bug.
 - **A remote skill can shadow a built-in.** `alirezarezvani/claude-skills@init`
@@ -487,6 +587,24 @@ the work with no skill at all is the ordinary case — not an admission of failu
 - **skills.sh REST is gated, the CLI is not.** `curl .../api/v1/skills/search`
   → `authentication_required` (Vercel OIDC). `npx skills find` needs no token.
   Do not report skills.sh as unreachable on the strength of the curl.
+- **⚠️ `npx skills` dies under Node 18 — and `/usr/local/bin/npx` IS Node 18 on
+  this Mac.** It crashes with `SyntaxError: The requested module 'node:util' does
+  not provide an export named 'styleText'` (added in Node 20). Forcing
+  `PATH=/usr/bin:/bin` makes it worse — `npx` disappears entirely
+  (`command not found`). Resolve a Node 20+ binary first, e.g.
+  `zsh -lc 'which -a node npx'` or an nvm/Homebrew path, and call that npx.
+  **A crash here is not "skills.sh is down"** — it is the local Node version, and
+  the remaining Tier 1 sources still have to run.
+- **skillsmp search is noisy on short queries.** `q=ios` returns Cisco IOS
+  patterns, SwiftUI collections and monorepo hits whose `stars` are the *parent
+  repo's* (386,424 on one), so the number is not a per-skill trust signal there.
+  Query with two or three specific words (`capacitor ios build`), and read the
+  `githubUrl` — a hit buried at `…/docs/ja-JP/skills/…` is a translated copy, not
+  a separate skill.
+- **GitHub repo search out-performs both registries for anything niche.** On a
+  Capacitor/iOS hunt the registries returned near-noise while repo search
+  surfaced two skills over 600 stars. When a task is framework- or
+  platform-specific, weight GitHub first.
 - **`skills find` needs a non-TTY stdin** to print instead of prompting — hence
   the `echo "" |` prefix. Without it, it opens an interactive picker that a tool
   call cannot answer.
