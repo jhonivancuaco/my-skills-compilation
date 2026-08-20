@@ -1,6 +1,6 @@
 ---
 name: tulong
-description: Ask the user what they want to do, draft the plan, rank every skill on this machine (workspace, personal, plugin, built-in), then ALWAYS search the open-source world too — skills.sh, skillsmp.com, GitHub, awesome lists, the open web, wherever skills are published — and suggest anything found that is not installed yet, show the install candidates as tickboxes and download only the ticked ones, then show the whole shortlist as tickboxes so the user can uncheck any, auto-load the ones kept, confirm, then do the work straight — only the task, no side jobs, no overthinking, no over-engineering, and reuse what already exists instead of writing a second version. Use when Ivan types /tulong, asks "anong skill ang gamitin", "anong pwede mong gawin", "which skill should I use", "tulungan mo ako", "help me pick a skill", "ano bang magagawa mo", or describes a task without naming any tool.
+description: Ask the user what they want to do, draft the plan, rank every skill on this machine (workspace, personal, plugin, built-in), then ALWAYS search the open-source world too — skills.sh, skillsmp.com, GitHub, awesome lists, awesomeclaude.ai, onewave-ai, the open web, wherever skills are published — and suggest anything found that is not installed yet, show the install candidates as tickboxes and download only the ticked ones, then show the whole shortlist as tickboxes so the user can uncheck any, auto-load the ones kept, confirm, then do the work straight — only the task, no side jobs, no overthinking, no over-engineering, and reuse what already exists instead of writing a second version. Use when Ivan types /tulong, asks "anong skill ang gamitin", "anong pwede mong gawin", "which skill should I use", "tulungan mo ako", "help me pick a skill", "ano bang magagawa mo", or describes a task without naming any tool.
 ---
 
 # Tulong — tanong, plano, hanap ng skill, tickbox, tapos gawin
@@ -253,6 +253,8 @@ Hindi sila ang mundo. **Ang buong Tier 1 sa ibaba ay tinatakbo sa bawat run.**
 | **skills.sh** | `npx skills find` — may install counts | Install count ang pinakamalinaw na trust signal |
 | **skillsmp.com** | plain REST, may stars | Iba ang index nito sa skills.sh, kaya iba ang nahahanap |
 | **Awesome lists** | hanapin sa GitHub ang `awesome claude code` / `awesome claude skills`, tapos i-raw ang README | Dito mauna ang bago bago pa ito ma-index ng registry |
+| **awesomeclaude.ai** | `https://awesomeclaude.ai/awesome-claude-skills` — 204 skills, 13 kategorya; ang README ng `BehiSecc/awesome-claude-skills` ang pinagmulan | **Naka-curate at may kategorya**, at ang mga repo dito ay hindi lahat naka-index sa skills.sh o skillsmp — hal. `sanjay3290/ai-skills`, `webfuse-com/awesome-claude`, `obra/superpowers` |
+| **onewave-ai** | `https://www.onewave-ai.com/resources/claude-skills` — 187 skills sa isang MIT repo, `OneWave-AI/claude-skills` | **Isang monorepo, isang folder kada skill**, kaya diretso ang raw fetch. Malakas sa business, sales, marketing, design — mga bihirang lumabas sa dev-heavy na registry |
 | **Claude Code plugin marketplaces** | `/plugin marketplace add <owner/repo>` — ang plugin ay may kargang skills | Maraming skill ay naka-bundle sa plugin, hindi naka-solo |
 | **Ang bukas na web** | `WebSearch` — `"claude skill" SKILL.md <topic> site:github.com` | Para sa wala sa alinmang registry |
 
@@ -337,6 +339,56 @@ dumaan man lang sa isang listahan; ang galing sa raw na web ay wala. Bago
 isuggest ang isang bagay na walang install count at walang stars, **basahin ang
 `SKILL.md` nito.** Hindi mabasa → hindi ito pumapasok sa tickbox.
 
+### awesomeclaude.ai — 204 curated, may kategorya
+
+Ang site ay **visual front-end lang** ng isang awesome list, at Nuxt SSR ito —
+~340 KB ng HTML kada hit. **Ang README ang hinihingi, hindi ang page**: pareho
+ang laman, isang fetch, walang tags na aalisin.
+
+```bash
+curl -sSL --max-time 20 \
+  https://raw.githubusercontent.com/BehiSecc/awesome-claude-skills/main/README.md \
+  | grep -i "<topic>" | /usr/bin/head -20
+```
+
+- Ang bawat entry ay `[pangalan](github-url) — deskripsyon`, nakagrupo sa 13
+  kategorya (Document, Development & Code, Data & Analysis, Security & Web
+  Testing, Utility & Automation, at iba pa). May **Collections** section sa dulo
+  — doon ang mga repo na maraming skill ang karga.
+- **Walang install count at walang stars ang listahan mismo.** Kaya ang panuntunan
+  sa itaas ang bumabagsak dito nang buo: basahin ang `SKILL.md` bago isuggest.
+  Hindi mabasa → hindi ito pumapasok sa tickbox.
+- Kapag bumagsak ang raw README (404, ibang branch), ang page ang fallback:
+  `curl -sS --max-time 25 -A 'Mozilla/5.0' https://awesomeclaude.ai/awesome-claude-skills`,
+  tapos salain ang tags.
+
+### onewave-ai — 187 skills, isang MIT repo
+
+Isang monorepo, at **isang top-level directory kada skill** — kaya ang GitHub
+contents API ang pinakamalinaw na tingin, hindi ang page:
+
+```bash
+curl -sS --max-time 20 "https://api.github.com/repos/OneWave-AI/claude-skills/contents/" \
+  | python3 -c "import json,sys;[print(i['name']) for i in json.load(sys.stdin) if i['type']=='dir']" \
+  | grep -i "<topic>"
+```
+
+Tapos basahin ang `SKILL.md` nito bago isuggest:
+
+```bash
+curl -sSL --max-time 20 \
+  "https://raw.githubusercontent.com/OneWave-AI/claude-skills/main/<skill>/SKILL.md" \
+  | /usr/bin/head -20
+```
+
+- **Dito ito malakas:** sales, marketing at content, consulting, operations,
+  design, Claude Cowork — mga bagay na manipis sa dev-heavy na registry. May
+  coding skills din (52 sa 187).
+- MIT lahat at isang may-ari, kaya isang tiwala ang tinitimbang — hindi
+  isa-isang repo ng magkaibang tao.
+- Ang install ay walang `npx skills` na daan: **raw fetch ng buong folder**, gaya
+  ng GitHub sa step 5 sa ibaba.
+
 ### Ano ang isinusuggest — at ano ang hindi
 
 **Ang panuntunan:** nahanap at **wala pa sa makina** → kandidato sa step 5.
@@ -378,7 +430,7 @@ look; cut to the best four and say in one line what was dropped.
 | Field | Where it comes from |
 |---|---|
 | name | `owner/repo@skill`, skillsmp's `name`, or the repo's skill directory |
-| source | `skills.sh`, `skillsmp`, `github`, `web` |
+| source | `skills.sh`, `skillsmp`, `github`, `awesomeclaude`, `onewave`, `web` |
 | trust | install count (skills.sh), `stars` (skillsmp / GitHub), or **the `SKILL.md` you read** when it has neither |
 | naka-install na? | already on disk → **not** an install candidate; it goes straight to step 6 |
 | why | the numbered plan step it serves |
@@ -476,7 +528,8 @@ used and leaves out the rest.
 - The `description` of each option is **why it is here** — the step of the plan
   it serves. Not the skill's own blurb.
 - Mark provenance in the label: `[workspace]`, `[personal]`, `[builtin]`,
-  `[bago — skills.sh]`, `[bago — skillsmp]`.
+  `[bago — skills.sh]`, `[bago — skillsmp]`, `[bago — awesomeclaude]`,
+  `[bago — onewave]`.
 - Mark `[REFERENCE-ONLY]` on any that cannot be `Skill()`-loaded, so an unticked
   one is an informed choice.
 - ⛔ **Wala rito ang `verification-before-completion`.** Hindi ito option, hindi
@@ -653,6 +706,8 @@ failure.
 | `npx skills add` exits 0 but nothing installed | `-s <skill>` was missing. Re-run with it. |
 | `authentication_required` from skills.sh | That is the REST API. Use `echo "" \| npx -y skills@latest find "<query>"`. |
 | skillsmp returns 429 | Anonymous cap is 50/day, 10/min. Wait a minute, or fall back to skills.sh. |
+| awesomeclaude.ai returns a 340 KB wall of HTML | You fetched the page. Fetch `BehiSecc/awesome-claude-skills`'s raw `README.md` instead — same list, no tags. |
+| A OneWave skill has no `npx skills` entry | It never had one. `OneWave-AI/claude-skills` is a plain monorepo — install it by raw-fetching the skill's folder. |
 | Raw `SKILL.md` fetch 404s | The tree URL's branch is not `main`, or the skill lives one directory deeper. Open the `githubUrl` and copy the real path. |
 | `Unknown option: 5` from a pipeline | XAMPP's `head`. Use `/usr/bin/head`. |
 | `command not found: timeout` | Expected on this Mac. Use the Bash tool's `timeout` parameter. |
