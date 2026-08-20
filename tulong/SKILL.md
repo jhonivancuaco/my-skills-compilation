@@ -1,6 +1,6 @@
 ---
 name: tulong
-description: Ask the user what they want to do, draft the plan, rank every skill on this machine (workspace, personal, plugin, built-in), then ALWAYS search the open-source world too — skills.sh, skillsmp.com, GitHub, awesome lists, awesomeclaude.ai, onewave-ai, the open web, wherever skills are published — and suggest anything found that is not installed yet, show the install candidates as tickboxes and download only the ticked ones, audit every skill for harmful commands, code and instructions before it is installed or loaded (and re-audit the ones already on the machine), then show the whole shortlist as tickboxes so the user can uncheck any, auto-load the ones kept, confirm, then do the work straight — only the task, no side jobs, no overthinking, no over-engineering, and reuse what already exists instead of writing a second version. Use when Ivan types /tulong, asks "anong skill ang gamitin", "anong pwede mong gawin", "which skill should I use", "tulungan mo ako", "help me pick a skill", "ano bang magagawa mo", or describes a task without naming any tool.
+description: Ask the user what they want to do, draft the plan, rank every skill on this machine (workspace, personal, plugin, built-in), then search eight named open-source sources — anthropics/skills, ComposioHQ/awesome-claude-skills, alirezarezvani/claude-skills, skills.sh, skillsmp.com, awesome lists on GitHub, awesomeclaude.ai, onewave-ai — and nothing beyond them, so the hunt stays fast: kung wala doon, edi wala, at suggest anything found that is not installed yet, show the install candidates as tickboxes and download only the ticked ones, audit every skill for harmful commands, code and instructions before it is installed or loaded (and re-audit the ones already on the machine), then show the whole shortlist as tickboxes so the user can uncheck any, auto-load the ones kept, confirm, then do the work straight — only the task, no side jobs, no overthinking, no over-engineering, and reuse what already exists instead of writing a second version. Use when Ivan types /tulong, asks "anong skill ang gamitin", "anong pwede mong gawin", "which skill should I use", "tulungan mo ako", "help me pick a skill", "ano bang magagawa mo", or describes a task without naming any tool.
 ---
 
 # Tulong — tanong, plano, hanap ng skill, tickbox, tapos gawin
@@ -223,11 +223,13 @@ kailangan", walang "sapat na ang local".
 open-source na mundo ay gumagalaw araw-araw — pwedeng may skill na mas bagay sa
 task kaysa sa pinakamalapit na nasa disk, at hindi mo iyon malalaman kung hindi
 ka titingin. Libre at mabilis ang tingin; ang hindi pagtingin ang mahal, dahil
-hindi mo nakikita ang na-miss mo.
+hindi mo nakikita ang na-miss mo. **Pero maikli ang tingin** — walong
+pinagkukunan, isang pasada, at kung wala doon, wala.
 
 **Tatlong linya ang buong step:**
 
-1. **Hanapin** — sa buong open source, hindi sa isa o dalawang registry.
+1. **Hanapin** — sa walong pinagkukunan sa ibaba, at doon lang. Mabilis na
+   pasada, hindi paghalughog sa buong internet.
 2. **Isuggest ang bago** — anumang nahanap na **wala pa sa makina** ay pumapasok
    sa listahan ng kandidato sa step 5, kahit may maayos nang local match.
 3. **Walang ini-install dito** — ang tickbox ng step 5 ang nag-iinstall.
@@ -237,47 +239,38 @@ hindi mo nakikita ang na-miss mo.
 > pagkatapos tumik ni Ivan. Ang install bago ang tickbox ay bug sa flow, hindi
 > shortcut.
 
-### Saan hahanap — LAHAT ng kilalang pinagkukunan, hindi dalawang site lang
+### Saan hahanap — WALO lang, at sarado ang listahan
 
-⛔ **Hindi sapat ang skills.sh at skillsmp.** Iyon ang dalawang registry na may
-sariling API, kaya sila ang pinakamadaling tawagan — at iyon lang ang dahilan.
-Hindi sila ang mundo. **Ang buong Tier 1 sa ibaba ay tinatakbo sa bawat run.**
-
-#### Tier 1 — obligado, lahat ng ito, bawat run
-
-| Pinagkukunan | Paano | Bakit hindi pwedeng laktawan |
-|---|---|---|
-| **GitHub repo search** | `api.github.com/search/repositories?q=…` — anonymous, ~10 req/min | **Ito ang pinaka-produktibo, malayo.** Dito nakita ang `rshankras/claude-code-apple-skills` (641★) at `conorluddy/ios-simulator-skill` (1219★) na wala sa kahit aling registry |
-| **GitHub topics** | `q=topic:claude-skill`, `topic:claude-skills`, `topic:agent-skills`, `topic:claude-code-skills`, `topic:claude-code-plugin` | Ang tamang-tag na repo ay hindi laging tumatama sa keyword search |
-| **Anthropic mismo** | `anthropics/skills` → **`/skills`** (19 official: `docx`, `pdf`, `pptx`, `xlsx`, `mcp-builder`, `skill-creator`, `webapp-testing`, `frontend-design`, `canvas-design`, `theme-factory`, at iba pa), plus `/template` at `/spec` | Official, 170K★, pinakamataas ang tiwala. Dito rin ang **spec** ng anyo ng isang skill |
-| **ComposioHQ/awesome-claude-skills** | 72.8K★ — ⚠️ **`master` ang branch, hindi `main`.** Skills bilang top-level dir, at may curated README | Pinakamalaking awesome list na may kargang skills mismo, hindi puro link |
-| **alirezarezvani/claude-skills** | naka-grupo kada domain (`engineering/`, `marketing/`, `finance/`, `audit/`, `product-team/`, `compliance-os/`…), **isang antas pa ang lalim ng skill dir**. Plugin marketplace din — 88 plugins sa `.claude-plugin/marketplace.json` | Malawak sa business at ops, at bihirang tumama sa keyword search dahil nasa loob ng domain folder ang pangalan |
-| **skills.sh** | `npx skills find` — may install counts | Install count ang pinakamalinaw na trust signal |
-| **skillsmp.com** | plain REST, may stars | Iba ang index nito sa skills.sh, kaya iba ang nahahanap |
-| **Awesome lists** | hanapin sa GitHub ang `awesome claude code` / `awesome claude skills`, tapos i-raw ang README | Dito mauna ang bago bago pa ito ma-index ng registry |
-| **awesomeclaude.ai** | `https://awesomeclaude.ai/awesome-claude-skills` — 204 skills, 13 kategorya; ang README ng `BehiSecc/awesome-claude-skills` ang pinagmulan | **Naka-curate at may kategorya**, at ang mga repo dito ay hindi lahat naka-index sa skills.sh o skillsmp — hal. `sanjay3290/ai-skills`, `webfuse-com/awesome-claude`, `obra/superpowers` |
-| **onewave-ai** | `https://www.onewave-ai.com/resources/claude-skills` — 187 skills sa isang MIT repo, `OneWave-AI/claude-skills` | **Isang monorepo, isang folder kada skill**, kaya diretso ang raw fetch. Malakas sa business, sales, marketing, design — mga bihirang lumabas sa dev-heavy na registry |
-| **Claude Code plugin marketplaces** | `/plugin marketplace add <owner/repo>` — ang plugin ay may kargang skills | Maraming skill ay naka-bundle sa plugin, hindi naka-solo |
-| **Ang bukas na web** | `WebSearch` — `"claude skill" SKILL.md <topic> site:github.com` | Para sa wala sa alinmang registry |
-
-#### Tier 2 — tignan kapag manipis ang nakuha sa Tier 1
+**Walo ang pinagkukunan, at hindi ito lumalawak.** Ang mga ito ang may sariling
+API o isang raw na README na diretsong nababasa, kaya mabilis silang tumakbo.
+⛔ **Walang GitHub repo search, walang topic sweep, walang `WebSearch`, walang
+plugin marketplace, walang npm, walang MCP registry, walang community feed.**
+Matagal ang mga iyon at halos paulit-ulit lang ang kinalalabasan.
 
 | Pinagkukunan | Paano |
 |---|---|
-| **npm** | `npm search "claude skill <topic>"` — may naka-package bilang npm module |
-| **Template/aggregator sites** | `claude-code-templates` at kauri — nagko-collect ng skills, agents at commands |
-| **MCP registries** | smithery.ai, mcp.so, PulseMCP, Glama — kadalasan may kasamang skill ang MCP server |
-| **Hugging Face** | may collections ng agent skills |
-| **Community** | Reddit `r/ClaudeAI`, X, Discord — sa `WebSearch`, dito lumalabas ang pinakabago |
+| **Anthropic mismo** | `anthropics/skills` → **`/skills`** (19 official: `docx`, `pdf`, `pptx`, `xlsx`, `mcp-builder`, `skill-creator`, `webapp-testing`, `frontend-design`, `canvas-design`, `theme-factory`, at iba pa), plus `/template` at `/spec`. Official, 170K★, pinakamataas ang tiwala |
+| **ComposioHQ/awesome-claude-skills** | 72.8K★ — ⚠️ **`master` ang branch, hindi `main`.** Skills bilang top-level dir, at may curated README |
+| **alirezarezvani/claude-skills** | naka-grupo kada domain (`engineering/`, `marketing/`, `finance/`, `audit/`, `product-team/`, `compliance-os/`…), **isang antas pa ang lalim ng skill dir**. Malawak sa business at ops |
+| **skills.sh** | `npx skills find` — may install counts, at iyon ang pinakamalinaw na trust signal |
+| **skillsmp.com** | plain REST, may stars. Iba ang index nito sa skills.sh, kaya iba ang nahahanap |
+| **Awesome lists (sa GitHub)** | hanapin ang `awesome claude code` / `awesome claude skills`, tapos i-raw ang README |
+| **awesomeclaude.ai** | 204 skills, 13 kategorya; ang README ng `BehiSecc/awesome-claude-skills` ang pinagmulan |
+| **onewave-ai** | 187 skills sa isang MIT repo, `OneWave-AI/claude-skills` — isang folder kada skill, kaya diretso ang raw fetch |
 
-**Ang panuntunan ay saklaw, hindi bilang.** Hindi na "dalawa ang minimum" —
-**lahat ng Tier 1.** Tigil lang kapag pare-parehong pangalan na ang lumalabas sa
-tatlo o higit pang pinagkukunan; iyon ang senyales na naabot na ang dulo. Kapag
-may pinagkukunang bumagsak (down, 429, nag-error ang CLI), **sabihin kung alin at
-ituloy ang iba** — hindi ito dahilan para maging dalawa ang natakbo.
+#### ⛔ PAG WALANG NAHANAP, EDI WALA
 
-**Bagong registry na lumitaw bukas ay kabilang dito.** Ang listahang ito ay hindi
-limitasyon — ito ang kilala ngayon. Kung may bago, idagdag sa Tier 1 at gamitin.
+Walang pangalawang pass, walang fallback na search engine, walang "subukan pa
+natin sa ibang lugar". Ang walong ito ang buong mundo ng step na ito — kapag
+wala sa kanila ang hinahanap, ang sagot ay **walang bagong skill**: sabihin sa
+isang linya, laktawan ang tickbox ng step 5, dumiretso sa step 6. Mas mahal ang
+matagal na hanap kaysa sa isang skill na hindi naman kailangan.
+
+**Bilis ang punto.** Isang tawag kada pinagkukunan, hindi paulit-ulit sa iba't
+ibang keyword. Tigil kapag pare-parehong pangalan na ang lumalabas sa tatlo o
+higit pang pinagkukunan. Kapag may pinagkukunang bumagsak (down, 429, nag-error
+ang CLI), **sabihin kung alin at ituloy ang iba** — hindi ito dahilan para
+maghanap sa labas ng walo.
 
 ### skills.sh — `npx skills find`
 
@@ -310,36 +303,22 @@ Each hit carries `name`, `description`, `author`, `stars`, `githubUrl` (a GitHub
 **tree** URL) and `skillUrl`. Optional params: `page`, `category`, `occupation`,
 `language`, `sortBy=stars|recent`.
 
-### GitHub — repo search, walang token na kailangan
-
-```bash
-curl -sS --max-time 20 \
-  "https://api.github.com/search/repositories?q=claude+skill+stripe+webhook&sort=stars&per_page=8" \
-  | python3 -c "import json,sys;[print(r['stargazers_count'], r['full_name'], (r['description'] or '')[:70]) for r in json.load(sys.stdin)['items']]"
-```
-
-- **Repo** search answers anonymously (~10 requests/min). **Code** search does
-  not — it needs a token, and there is no `gh` CLI on this Mac. Build the hunt on
-  repo search plus raw `SKILL.md` fetches, not on `gh search code`.
-- A hit is only a candidate once its `SKILL.md` has been seen:
-  `curl -sSL --max-time 20 https://raw.githubusercontent.com/OWNER/REPO/main/SKILL.md | /usr/bin/head -20`
-  — a collection keeps them at `skills/<name>/SKILL.md` instead of the root.
-- Stars are the trust signal here, the way install counts are on skills.sh.
-
-### Awesome lists at ang bukas na web
+### Awesome lists — README lang, hindi crawl
 
 Curated collections carry the newest skills before either registry indexes them.
-Find the list itself on GitHub (`awesome claude skills`), open its README raw,
-and read the table.
+Hanapin ang listahan mismo sa GitHub (`awesome claude skills`), buksan ang raw
+na README, basahin ang table. **Isang README kada listahan** — huwag itong
+gawing paghahanap sa buong GitHub.
 
-For a task neither registry knows, `WebSearch` is the last pass — e.g.
-`"claude skill" SKILL.md <framework> site:github.com`. What comes back is almost
-always a repo; vet it exactly like a GitHub hit above.
+⚠️ **Walang install count at walang stars ang galing sa listahan**, kaya bago
+ito isuggest, **basahin ang `SKILL.md` nito**:
 
-⚠️ **Mas malawak ang hanap, mas mahigpit ang pagsala.** Ang galing sa registry ay
-dumaan man lang sa isang listahan; ang galing sa raw na web ay wala. Bago
-isuggest ang isang bagay na walang install count at walang stars, **basahin ang
-`SKILL.md` nito.** Hindi mabasa → hindi ito pumapasok sa tickbox.
+```bash
+curl -sSL --max-time 20 https://raw.githubusercontent.com/OWNER/REPO/main/SKILL.md | /usr/bin/head -20
+```
+
+Sa isang collection, nasa `skills/<name>/SKILL.md` ito, hindi sa root. Hindi
+mabasa → hindi ito pumapasok sa tickbox.
 
 ### awesomeclaude.ai — 204 curated, may kategorya
 
@@ -473,11 +452,11 @@ Ivan, siya ang bahalang tumik:
 | Ordinary code work — read, edit, fix, test | **No skill is needed at all.** This is the most common case by far. Doing the task directly is the right answer. |
 | Walang install count, walang stars, hindi mabasa ang `SKILL.md` | Hindi lang ito hindi rekomendado — **hindi ito kandidato.** Huwag isama. |
 
-**"Walang sulit i-install" ay tamang sagot, at madalas ito ang tama.** Laging may
-nahahanap ang malawak na search; hindi lahat ng nahanap ay dapat mapunta sa
-makina ni Ivan. Kung wala talagang sulit, sabihin sa isang linya kung ano ang
-nakita at bakit walang pumasok, laktawan ang tickbox ng step 5, at dumiretso sa
-step 6. Ang masamang match na na-download ay mas malala kaysa walang skill — file
+**"Walang sulit i-install" ay tamang sagot, at madalas ito ang tama.** Hindi
+lahat ng nahanap ay dapat mapunta sa makina ni Ivan, at ang **walang nahanap ay
+normal na resulta**, hindi kulang na hanap. Kung wala talagang sulit, sabihin sa
+isang linya kung ano ang nakita at bakit walang pumasok, laktawan ang tickbox ng
+step 5, at dumiretso sa step 6. Ang masamang match na na-download ay mas malala kaysa walang skill — file
 iyon sa makina ni Ivan na tumatakbo nang buong agent permissions at hindi pa
 nakakatulong.
 
@@ -495,8 +474,8 @@ look; cut to the best four and say in one line what was dropped.
 | Field | Where it comes from |
 |---|---|
 | name | `owner/repo@skill`, skillsmp's `name`, or the repo's skill directory |
-| source | `skills.sh`, `skillsmp`, `github`, `awesomeclaude`, `onewave`, `web` |
-| trust | install count (skills.sh), `stars` (skillsmp / GitHub), or **the `SKILL.md` you read** when it has neither |
+| source | `anthropic`, `composio`, `alireza`, `skills.sh`, `skillsmp`, `awesome`, `awesomeclaude`, `onewave` — walang iba |
+| trust | install count (skills.sh), `stars` (skillsmp), or **the `SKILL.md` you read** when it has neither |
 | naka-install na? | already on disk → **not** an install candidate; it goes straight to step 6 |
 | why | the numbered plan step it serves |
 | collision | does `ls ~/.claude/skills` or the built-in list already hold this name? |
@@ -648,8 +627,8 @@ npx -y skills@latest add <owner/repo> -s <skill-name> -a claude-code -g -y --cop
   back anything other than `Safe` / `0 alerts`, **stop and tell Ivan** — the tick
   was consent to install a skill believed clean, not consent to a flagged one.
 
-**skillsmp.com, GitHub at web** — turn the tree URL into a raw URL and fetch the
-`SKILL.md`:
+**skillsmp.com at ang mga pinangalanang repo** — turn the tree URL into a raw
+URL and fetch the `SKILL.md`:
 
 ```
 https://github.com/OWNER/REPO/tree/BRANCH/path/to/skill
@@ -695,8 +674,9 @@ used and leaves out the rest.
 - The `description` of each option is **why it is here** — the step of the plan
   it serves. Not the skill's own blurb.
 - Mark provenance in the label: `[workspace]`, `[personal]`, `[builtin]`,
-  `[bago — skills.sh]`, `[bago — skillsmp]`, `[bago — awesomeclaude]`,
-  `[bago — onewave]`.
+  `[bago — anthropic]`, `[bago — composio]`, `[bago — alireza]`,
+  `[bago — skills.sh]`, `[bago — skillsmp]`, `[bago — awesome]`,
+  `[bago — awesomeclaude]`, `[bago — onewave]`.
 - Mark `[REFERENCE-ONLY]` on any that cannot be `Skill()`-loaded, so an unticked
   one is an informed choice.
 - ⛔ **Wala rito ang `verification-before-completion`.** Hindi ito option, hindi
@@ -795,10 +775,10 @@ failure.
 - **The remote hunt has no off switch.** It is not gated on the local score any
   more — a perfect local match still gets a search run beside it. What a strong
   local match changes is the *recommendation*, never whether you look.
-- **GitHub repo search is anonymous; code search is not.**
-  `/search/repositories` answers without a token at ~10 req/min;
-  `/search/code` returns 401, and `gh` is not installed on this Mac. Do not
-  design the hunt around a CLI that is not there.
+- **Walo ang pinagkukunan at hindi ito nadadagdagan mid-run.** Walang GitHub
+  repo search, walang `WebSearch`, walang npm at walang plugin marketplace —
+  kahit mukhang manipis ang nakuha. Manipis na resulta ay sagot din: walang
+  bagong skill.
 - **A hit is not a candidate until its `SKILL.md` has been read.** A registry hit
   carries a trust number; a repo off a web search carries nothing at all. Unread
   and untrusted means it never reaches the tickbox.
@@ -818,17 +798,17 @@ failure.
   (`command not found`). Resolve a Node 20+ binary first, e.g.
   `zsh -lc 'which -a node npx'` or an nvm/Homebrew path, and call that npx.
   **A crash here is not "skills.sh is down"** — it is the local Node version, and
-  the remaining Tier 1 sources still have to run.
+  the remaining seven sources still have to run.
 - **skillsmp search is noisy on short queries.** `q=ios` returns Cisco IOS
   patterns, SwiftUI collections and monorepo hits whose `stars` are the *parent
   repo's* (386,424 on one), so the number is not a per-skill trust signal there.
   Query with two or three specific words (`capacitor ios build`), and read the
   `githubUrl` — a hit buried at `…/docs/ja-JP/skills/…` is a translated copy, not
   a separate skill.
-- **GitHub repo search out-performs both registries for anything niche.** On a
-  Capacitor/iOS hunt the registries returned near-noise while repo search
-  surfaced two skills over 600 stars. When a task is framework- or
-  platform-specific, weight GitHub first.
+- **Ang registry ay mahina sa niche na task.** Sa isang Capacitor/iOS na hunt,
+  halos ingay ang ibinalik ng dalawang registry. Ang tatlong pinangalanang repo
+  at ang awesome lists ang mas malamang na may hawak niyan — pero kung wala rin
+  doon, tapos na ang hanap; huwag lumawak.
 - **`skills find` needs a non-TTY stdin** to print instead of prompting — hence
   the `echo "" |` prefix. Without it, it opens an interactive picker that a tool
   call cannot answer.
