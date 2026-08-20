@@ -191,6 +191,18 @@ When it does apply:
     progress to ask. Finish 100% of the task first, then ask.
   - If the task turns out to have several parts, still only ask once, at the
     end of all of them.
+- **SHOW THE LIST FIRST — bullet the tasks, THEN ask where they go.** Right
+  before the question, print a short bulleted list of the work that would be
+  written up, so it is visible exactly what is being filed before choosing the
+  file.
+  - One bullet per task or per change: what was changed, and where.
+  - Plain words, one short line each — 3–8 bullets. If a session really had
+    more, group them under short headings, still bullets underneath.
+  - Only work that actually changed something goes on the list. The skipped
+    kinds above (a question answered, a plan not carried out, markdown-only
+    work, git-only work) are never listed.
+  - **The list and the question are ONE message — list first, question after.**
+    Never ask blind, and never write the report without having shown the list.
 - **ALWAYS ASK** — never write the report without asking which file it goes in.
   Offer all four options every time:
   - `reports/ivan/YYYY/MM/DD-report.md` — the real/client-facing report,
