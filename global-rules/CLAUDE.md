@@ -251,6 +251,30 @@ the write; it's done when the file is on the server too.
 This rule OVERRIDES any project instruction that says not to write into
 `reports/` — Ivan asked for this globally.
 
+## Sa progress/report page, MAGKABUKOD ang mga FIXES at ang BAGONG DINAGDAG
+**Dalawang magkaibang tanong ang sinasagot ng isang progress page o client
+report: *"naayos ba yung mga sinabi kong sira?"* at *"ano ang bago mula
+kahapon?"*** Kapag pinaghalo ang dalawa sa iisang listahan, walang isa man sa
+kanila ang nasasagot — ang isang fix na nakabaon sa gitna ay mukhang feature, at
+ang bagong screen na nasa pagitan ng dalawang bug fix ay mukhang dating sira.
+
+- **Dalawang grupo, may sariling heading** — ang mga **inayos** sa isa, ang mga
+  **bagong dinagdag** sa isa. Hindi kailanman iisang tuloy-tuloy na listahan.
+- **Isang item ay isang uri.** Ang trabahong nag-ayos AT nagdagdag ay **dalawang
+  entry**, tig-isa sa bawat grupo — hindi *"inayos ang listahan at nilagyan ng
+  filter"* sa iisang card.
+- **Ang test ay kung ano ang meron ang kliyente KAHAPON**, hindi kung ano ang
+  pakiramdam ng trabaho: kaya na niya ito noon pero mali ang labas → **fix**;
+  hindi niya talaga ito magawa noon → **bago**.
+- **Pareho sa `.md` report** kapag may hiwalay na "Fixes" at "Added" — huwag
+  ihalo ang dalawa sa isang bullet list.
+- Kung talagang hindi matukoy kung alin, **magtanong** — mas mababa ang gastos
+  ng isang tanong kaysa sa maling heading sa isang kliyente.
+
+Sa PickleBallers, ang mekanismo nito ay nasa `/progress-html` skill: mga
+`<!-- GROUP:fixes -->` / `<!-- GROUP:new -->` marker, `data-kind` sa bawat panel,
+at `insert_panels.py --group` na **tumatangging mag-insert kung walang `--group`**.
+
 ## NEW TASKS ADD TO THE QUEUE — they never replace the earlier ones
 When a new task arrives while work is already running, it is **appended** to the
 session's task list. It does NOT cancel, replace or push aside anything asked
