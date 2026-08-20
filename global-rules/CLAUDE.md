@@ -522,27 +522,46 @@ Ang `~/.claude/skills` ay tunay na git repo
 doon ang kopya ng global rules — kaya ang pagdagdag ng rule ay hindi tapos sa
 pag-edit ng isang file.
 
-### 1. May kambal ang global rules — i-update pareho
-Kapag may nadagdag, nabago o natanggal na rule sa **local global**
-(`~/.claude/CLAUDE.md`), i-update ang **`~/.claude/skills/global-rules/CLAUDE.md`**
-sa **parehong session**. Iisang dokumento ito sa dalawang lugar: magkatulad sila
-byte-for-byte, at ganoon dapat sila manatili.
+### 1. May kambal ang global rules — i-update pareho, BAGO ang commit
+Iisang dokumento ang `~/.claude/CLAUDE.md` at ang
+`~/.claude/skills/global-rules/CLAUDE.md`, nakalagay lang sa dalawang lugar:
+magkatulad sila **byte-for-byte**, at ganoon dapat sila manatili.
+
+**DALAWA ang nagti-trigger ng sync, hindi isa:**
+
+| Nangyari | Gawin |
+|---|---|
+| may nadagdag, nabago o natanggal na rule sa local global | i-sync ang kambal, sa **parehong session** |
+| **may bagong skill na na-install o na-add** | i-sync **din** ang kambal — **bago** ang commit, kahit walang rule na nabago |
+
+**Ang pangalawa ay hindi optional at hindi hinuhusgahan.** Huwag mag-isip kung
+"may nabago ba talaga sa rules?" — basta may bagong skill, `cp` na agad. Isang
+linyang utos lang ito at wala itong masisira: kung pareho na ang dalawa, wala
+namang lalabas sa `git status`. Ang dahilan ay simple — **bawat push ay
+nag-iiwan ng repo na may pinakabagong rules**, hindi lang ng bagong folder ng
+skill, at hindi na kailangang alalahanin sa susunod na session.
 
 ```sh
 cp ~/.claude/CLAUDE.md ~/.claude/skills/global-rules/CLAUDE.md
 md5 ~/.claude/CLAUDE.md ~/.claude/skills/global-rules/CLAUDE.md   # dapat pareho
 ```
 
+⛔ **Hindi ito ginagawa pagkatapos ng commit.** Ang sync ay nauuna, para isang
+commit lang ang lumalabas — ang skill at ang rules na kasama nito — hindi
+dalawang commit na kalahati bawat isa.
+
 ### 2. Commit at push ang LAHAT ng changes sa `~/.claude/skills`
 Kapag may **bagong skill na na-install o na-add**, o may **nadagdag na rule sa
 local global**, pumasok sa `~/.claude/skills` at i-commit at i-push ang lahat ng
-changes — kasama ang bagong skill folder at ang updated na rule file:
+changes — kasama ang bagong skill folder at ang updated na rule file. **Apat na
+hakbang, at ang sync ang UNA:**
 
 ```sh
+cp ~/.claude/CLAUDE.md ~/.claude/skills/global-rules/CLAUDE.md   # 1. sync muna
 cd ~/.claude/skills
-git add -A
-git commit -m "<kung ano ang nabago>"
-git push origin main
+git add -A                                                       # 2. lahat
+git commit -m "<kung ano ang nabago>"                            # 3.
+git push origin main                                             # 4.
 ```
 
 - **`git add -A` ang tama DITO.** Sariling repo ito ng skills at lahat ng nasa
