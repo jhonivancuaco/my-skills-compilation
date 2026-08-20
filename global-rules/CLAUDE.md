@@ -85,13 +85,24 @@ Never end a deploy at the upload, and never end it at the restart either —
 step 10 is part of the task.
 
 ### DEPLOY AUTOMATICALLY — never wait to be told, never ask permission
-In an SFTP workspace, deploying is **part of the task**, not a follow-up and not
-a separate favour to ask about. The moment the local work is finished and tested,
-run steps 4–10 straight through, on your own initiative.
+**Sa isang SFTP project, LAHAT ng trabaho ay ginagawa sa LOCAL muna.** Doon
+ini-edit, doon pinapatakbo, at doon sinisiguro na gumagana ang lahat — bago pa
+maisip ang server. Tapos ay **diretso na ang deploy**, nang hindi hinihintay ang
+utos: ang deploy ay huling hakbang ng parehong task, hindi hiwalay na pabor na
+hihingin pa.
 
-- ⛔ **Never ask "shall I deploy?"** and never end a turn with the work sitting
-  on the local machine "ready to deploy". A change that is not on the server is
-  an unfinished task, however clean the code is.
+Ang buong daan sa isang linya: **gawin sa local → siguraduhing working →
+diretsong deploy sa server.**
+
+- **Local ang lahat ng edit.** Walang inieedit ng diretso sa server; ang server
+  ay tumatanggap ng file, hindi ng pag-edit. (Steps 1–3 sa itaas.)
+- **Siguraduhing working BAGO mag-upload.** Hindi umaakyat ang isang bagay na
+  hindi pa napatakbo o hindi pa napatunayan sa local. Ang deploy ay hindi ang
+  paraan para malaman kung tama ang code — ito ang paglipat ng bagay na tama na.
+- **Pagkatapos, deploy agad — walang tanong.** ⛔ **Never ask "shall I deploy?"**
+  and never end a turn with the work sitting on the local machine "ready to
+  deploy". A change that is not on the server is an unfinished task, however
+  clean the code is.
 - ⛔ **Never treat "he didn't say deploy" as a reason to stop.** The ask "fix X"
   in an SFTP workspace means "fix X **and put it live**". That is the default,
   and it does not need to be repeated every time.
@@ -104,14 +115,16 @@ run steps 4–10 straight through, on your own initiative.
   what is needed to unblock it, and keep the percentage below 100%. Then, the
   moment it is unblocked, deploy without being asked again.
 
-**The ONE exception — a local-only session.** If the user says the session is to
-be held locally (e.g. *"local muna"*, *"wag mo munang i-deploy"*, *"hold it
-local"*, *"don't push it live yet"*), then **nothing** from that session goes to
-the server: no upload, no build, no restart. That instruction covers the WHOLE
-session, not just the task in hand, and it stays in force until the user lifts it
-— a later task in the same session does not quietly go back to auto-deploying.
-Say in the final message that the work is finished locally and still waiting to
-be deployed, and write it up in the `-local` report variant.
+**The ONE exception — kapag sinabi ni Ivan na sa local lang muna.** Kung sinabi
+niyang hawak sa local ang session (hal. *"local muna"*, *"wag mo munang
+i-deploy"*, *"hold it local"*, *"don't push it live yet"*), then **nothing** from
+that session goes to the server: no upload, no build, no restart. Ang trabaho ay
+tinatapos at sinusubok pa rin sa local — hindi ito hindi-paggawa, hindi lang ito
+umaakyat. That instruction covers the WHOLE session, not just the task in hand,
+and it stays in force until the user lifts it — a later task in the same session
+does not quietly go back to auto-deploying. Say in the final message that the
+work is finished locally and still waiting to be deployed, and write it up in the
+`-local` report variant.
 
 ## SFTP projects — check local files are updated BEFORE editing
 When a project deploys over SFTP/scp (no git), the server copy is the source of truth and may be newer than the local copy (edited on the server directly, or by another session/person). Before editing any local file in an SFTP project:
@@ -146,6 +159,12 @@ changed, there is nothing to report — do not ask, just skip it silently:
   bug then commit and push" changed a file, so it asks at the very end as
   normal. The test is whether YOU edited something this session, not whether
   the commit's diff is large.
+- **rule at skill housekeeping** — ang pag-mirror ng bagong rule sa
+  `~/.claude/skills/global-rules/CLAUDE.md`, ang pag-install ng bagong skill, at
+  ang commit/push sa `~/.claude/skills`. Kahit may ibang trabahong nangyari sa
+  parehong session at may report na isusulat, **ang bahaging ito ay hindi
+  kailanman pumapasok doon** — tingnan ang *Bawat bagong rule at bawat bagong
+  skill ay naco-commit* sa dulo ng file.
 
 If in doubt, the test is simple: **did anything other than a `.md` file change
 in the project?** No → skip the question entirely. Yes → ask at the very end.
@@ -318,151 +337,38 @@ from the very first thing asked.
 - **If something genuinely can't be finished**, name it explicitly in the final
   message with the reason and what's left — never let it pass silently as done.
 
-## UI work gets a designer's eye — judge it hard before it ships
-Any time something visual is built or touched — a screen, a page, a component,
-a modal, an email, a PDF — design it like a senior product designer with taste
-and very little patience. Not "it works", not "it's fine": it has to look
-deliberate. The first thing that renders is a draft, never the answer.
+## 🔴 DESIGN WORK AUTO-LOADS `ui-ux-pro-max` — hindi tinatanong
+**Anumang design na gagalawin ay nagsisimula sa pag-load ng `ui-ux-pro-max`** —
+bago ang unang linya ng markup, at hindi pagkatapos:
 
-**Before writing the markup**, decide three things in one line each: what the
-screen is FOR, what the eye should land on FIRST, and what can be removed. A
-layout with no stated focal point always comes out flat.
+```
+Skill({ skill: "ui-ux-pro-max" })
+```
 
-**Then judge your own output the way a harsh reviewer would.** Walk this list
-and fix what fails — assume something fails:
-- **Hierarchy** — one clear primary action per screen, and it looks primary.
-  Everything else is quieter. If three things shout, nothing is heard.
-- **Type** — two or three sizes per screen, not six. Consistent weights. No
-  centred walls of text; line length capped for reading (~60–75ch).
-- **Spacing on a scale** — 4/8px steps, reused. Related things sit closer than
-  unrelated things; that gap is what communicates grouping, not a divider line.
-- **Alignment** — everything lands on a shared edge or grid. One item off by 3px
-  is what makes a screen feel amateur, even when nobody can name why.
-- **Contrast & legibility** — WCAG AA at minimum (4.5:1 body, 3:1 large). Grey
-  text on a grey background is not "subtle", it's unreadable. Borders on cards,
-  tiles and inputs must actually be visible.
-- **Density & breathing room** — generous padding, but no dead oceans of empty
-  space either. Consistent card padding across the whole screen.
-- **Every state, not just the happy one** — hover, focus-visible, active,
-  disabled, loading/skeleton, empty, error, and long-content overflow. An
-  unstyled empty state is an unfinished screen.
-- **Responsive** — check it down to 375px and up wide. Nothing clipped, nothing
-  scrolling sideways, tap targets at least 44px.
-- **Motion** — subtle and fast (150–250ms, ease-out) or none at all. No bouncing.
-- **Consistency with what's already there** — reuse the project's existing
-  components, tokens, spacing and radii. A screen that invents its own look is a
-  bug, however pretty it is on its own.
+**Kailan ito nag-fire:** kahit anong UI o visual na trabaho — bagong screen,
+page, component, modal, email, PDF — at ganoon din kapag may **inaayos o
+binabago** sa design na nandiyan na. Hindi ito tinatanong, hindi ito lumalabas
+sa tickbox, at hindi ito hinihintay na hilingin.
 
-**⛔ No generic AI-looking output.** These read as slop and are not acceptable
-unless the project's own design already uses them: purple/blue gradient heroes,
-emoji as section icons, glassmorphism by default, drop shadows on everything,
-rainbow-coloured stat cards, three-column feature grids nobody asked for,
-centre-aligning the whole page to hide a weak layout. Default-Bootstrap and
-default-Tailwind looks are drafts, not designs.
+**Kung wala ito sa machine, kunin ito** — tahimik, walang tanong: maghanap ng
+open-source (skills.sh, skillsmp.com) o sa isang GitHub repo, i-install, tapos
+i-load. Kung bigo ang install o wala na talaga ang pinanggalingan, sabihin sa
+**isang linya** at ituloy ang trabaho nang wala nito — hindi ito dahilan para
+ihinto o ipagpaliban ang task.
 
-**Look at the real thing before calling it done** — open the screen at 100%
-zoom, not just the diff. Screenshot it when the tooling allows. Then say in one
-line what you'd still improve given more time; there is always something.
-
-**The project's own design system wins over this rule.** Where a repo defines
-tokens, components or a `CLAUDE.md` design section, follow it exactly — this
-rule sets the standard of care, not the palette.
-
-### Consistency — a new screen must look like it came from the same app
-Every screen in a project belongs to ONE design language. Screen 2 is not a
-fresh start; it inherits everything from the screens already built. A colour or
-a layout may differ where the content demands it — the *treatment* may not.
-
-**Before building or editing any screen, open a finished sibling screen first**
-and copy its vocabulary. Read the actual file; don't design from memory:
-- the page header block (eyebrow label, title, one-line subtitle — same order,
-  same sizes, same spacing);
-- card treatment — border width and colour, corner radius, shadow, padding;
-- section headers — same weight, and the same right-side meta/counter position;
-- badges, pills and status chips — same shape, padding, casing, colour logic;
-- buttons — same heights, radii, and the same primary / secondary / danger
-  hierarchy for the same kinds of action;
-- icons — same size, same container (tinted tile vs bare glyph), same corner;
-- list rows, empty states, loading states — same pattern, not a new invention.
-
-**⛔ A flatter second screen is a BUG, not a style choice.** If one screen has
-bordered, rounded, padded cards with icon tiles and the next one is plain rows
-on a bare background, that is inconsistency — fix it before it ships, even if
-nobody complained. The test: put the new screen next to the older one; **if you
-can tell which was built later, redo the new one.**
-
-**Different does not mean unrelated.** Changing the background tint, the accent
-colour or the column count is fine when the content calls for it. Dropping the
-borders, shrinking the radius, losing the header pattern or hand-rolling a
-plainer card is not — those are the things that make it feel like a different
-product.
-
-**Reuse the component, don't rebuild it.** If a card, badge, header, empty state
-or button already exists in the project, import it. A second hand-written
-version of an existing component is the usual source of drift — and when the
-existing one genuinely doesn't fit, extend it rather than forking a lookalike.
-
-**Consistency is checked on screen, not in the diff.** Open both screens at 100%
-zoom side by side before calling it done.
-
-## 🔴 WALANG MAGDIDIKIT — minimum 10px na espasyo sa LAHAT ng gilid
-**Bawat item sa screen ay may hindi bababa sa 10px na malinis na espasyo sa
-APAT na gilid — top, bottom, left at right.** Button, text, heading, card,
-section, popup, modal, badge, input, icon, list row, image, table — lahat.
-Walang magbabanggaan, walang magdidikit: hindi sa katabi nito, at hindi sa
-gilid ng lalagyan nito.
-
-- **10px ang SAHIG, hindi ang target.** Dahil ang spacing scale ay 4/8, ang
-  pinakamaliit na aktwal na gagamitin ay **12px** (`gap-3`, `p-3`), at 16px ang
-  normal. Ang 8px ay **kulang na** para maghiwalay ng dalawang magkaibang item —
-  dati itong sapat, hindi na. Mas malaki kaysa 10px ay laging pwede; mas maliit,
-  hindi kailanman.
-- **Padding muna, margin huli.** Ang espasyo ay ginagawa ng **padding ng
-  lalagyan** at ng **`gap`** ng flex/grid — hindi ng margin ng bawat anak.
-  Ang margin ay nagko-collapse, nadadaanan ng overflow at nawawala kapag
-  nag-wrap ang layout; ang padding hindi. Gamitin lang ang margin kung
-  talagang walang lalagyan na pwedeng bigyan ng padding.
-- **Card sa loob ng card — dito ito madalas masira.** Ang panloob na card ay may
-  sariling espasyo mula sa loob na gilid ng main card: **12–16px sa lahat ng
-  gilid, kasama ang left at right.** Ibig sabihin ang main card ay may padding,
-  at ang listahan sa loob niya ay may `gap` — hindi `p-0` na naka-full-bleed ang
-  laman. Ang panloob na card na dikit sa kaliwa't kanang gilid ng main card ay
-  BUG, hindi style.
-- **Lahat ng apat na gilid, hindi lang yung napapansin.** Karaniwang nakakalimutan:
-  ang huling row bago ang ilalim ng card, ang badge sa kanang dulo ng header,
-  ang icon na dikit sa text, ang unang item pagkatapos ng section title, at ang
-  sticky footer na tumatakip sa huling row (bigyan ng bottom padding ang listahan).
-- **Popup, modal, bottom sheet, toast, dropdown, tooltip.** Ang laman ay may
-  padding mula sa gilid ng panel, at ang panel ay may espasyo mula sa gilid ng
-  screen — hindi edge-to-edge maliban kung sinadyang full-screen sheet. Ang
-  close button ay hindi dumidikit sa title.
-- **Sa 375px din, hindi lang sa desktop.** Doon unang nagbabanggaan ang mga item.
-  Walang horizontal scroll, walang naiipit na text sa gilid.
-- **Isang bagay lang ang exception:** ang icon at ang sarili niyang label sa loob
-  ng iisang button/chip ay **isang item**, hindi dalawa — hindi sila hinahati ng
-  10px. Ang patakaran ay para sa magkaibang item at sa item kontra sa gilid ng
-  lalagyan nito.
-
-**Check bago sabihing tapos:** buksan ang totoong screen sa 100% zoom, tapos sa
-375px. Kung may dalawang bagay na halos magkadikit — o may dumidikit sa gilid ng
-card, panel o screen — hindi pa tapos.
-
-### Bago hawakan ang anumang design, mag-load ng design skill
-Anumang UI/visual na trabaho — bagong screen, component, modal, page, email —
-**nagsisimula sa pag-load ng design skill**, hindi sa pagsusulat ng markup.
-
-- **Nasa machine na ito ang `ui-ux-pro-max`** — iyon ang default:
-  `Skill({ skill: "ui-ux-pro-max" })`. May searchable dito na spacing, touch
-  target, contrast, typography at layout na panuntunan — gamitin, huwag manghula.
-- Kung may mas bagay na skill sa mismong trabaho (`frontend-design`,
-  `web-design-guidelines`, `tailwind-design-system`), pwede iyon — basta may
-  na-load na design skill bago magsimula.
-- **Kung talagang walang bagay na skill sa machine**, maghanap ng open-source
-  (skills.sh, skillsmp.com), i-install, tapos gamitin. Kung bigo ang install,
-  sabihin sa isang linya at ituloy ang trabaho gamit ang mga patakaran dito —
-  huwag itigil ang task.
+- **Doon galing ang mga sagot, hindi sa hula** — spacing, touch target,
+  contrast, typography, layout, palette: nasa loob ng skill ang searchable na
+  data para diyan. Huwag manghula kung may mababasa.
+- **Pwede ang mas bagay na skill kung meron** (`frontend-design`,
+  `web-design-guidelines`, `tailwind-design-system`) — basta may na-load na
+  design skill bago magsimula. Pero `ui-ux-pro-max` ang default.
 - **Huwag mag-install kung meron nang kayang gumawa ng trabaho** — gamitin ang
-  nandiyan na. (DRY, tingnan ang *How the work is done* sa ibaba.)
+  nandiyan na. (DRY — tingnan ang *How the work is done* sa ibaba.)
+- **Isang linya lang ang sasabihin tungkol dito** — hal. `+ ui-ux-pro-max`.
+  Huwag ipaliwanag, huwag gawing sariling talata.
+- **Ang design system ng project ang panalo.** Kung may sariling tokens,
+  components o design section sa `CLAUDE.md` ang repo, iyon ang sundin — ang
+  skill ang nagbibigay ng pamantayan, hindi ng palette.
 
 ## Stay on task — no extras
 Do ONLY what the task asks. No unrelated work: no unprompted refactors, side fixes, extra explorations, or "while I'm here" improvements. Off-task thinking and work is slow and burns too many tokens. Before reading files, searching, or editing, check the action is directly needed for the current task; skip broad exploration when the target is already known. If something unrelated looks worth fixing, mention it in one sentence at the end instead of doing it.
@@ -608,3 +514,56 @@ huwag gawing sariling talata, huwag ipa-tanong kay Ivan.
 **Kailan ito hindi kailangan:** puro tanong lang (tingnan ang *Tanong lang =
 sagot lang*), o markdown-only na trabaho — walang kino-complete na code kaya
 walang bago-mag-claim na dapat patunayan.
+
+## 🔴 BAWAT BAGONG RULE AT BAWAT BAGONG SKILL AY NACO-COMMIT — AUTOMATIKO
+**Dalawang bagay ang laging sabay: ang rule file at ang git repo ng skills.**
+Ang `~/.claude/skills` ay tunay na git repo
+(`github.com/jhonivancuaco/my-skills-compilation`, branch `main`), at nakatira
+doon ang kopya ng global rules — kaya ang pagdagdag ng rule ay hindi tapos sa
+pag-edit ng isang file.
+
+### 1. May kambal ang global rules — i-update pareho
+Kapag may nadagdag, nabago o natanggal na rule sa **local global**
+(`~/.claude/CLAUDE.md`), i-update ang **`~/.claude/skills/global-rules/CLAUDE.md`**
+sa **parehong session**. Iisang dokumento ito sa dalawang lugar: magkatulad sila
+byte-for-byte, at ganoon dapat sila manatili.
+
+```sh
+cp ~/.claude/CLAUDE.md ~/.claude/skills/global-rules/CLAUDE.md
+md5 ~/.claude/CLAUDE.md ~/.claude/skills/global-rules/CLAUDE.md   # dapat pareho
+```
+
+### 2. Commit at push ang LAHAT ng changes sa `~/.claude/skills`
+Kapag may **bagong skill na na-install o na-add**, o may **nadagdag na rule sa
+local global**, pumasok sa `~/.claude/skills` at i-commit at i-push ang lahat ng
+changes — kasama ang bagong skill folder at ang updated na rule file:
+
+```sh
+cd ~/.claude/skills
+git add -A
+git commit -m "<kung ano ang nabago>"
+git push origin main
+```
+
+- **`git add -A` ang tama DITO.** Sariling repo ito ng skills at lahat ng nasa
+  loob nito ay sadyang naka-track. (Iba ito sa mga project repo, kung saan
+  pinapangalanan ang files isa-isa — tingnan ang *Commits are made on the
+  server* na rule ng PickleBallers.)
+- **Walang skill na naiiwang untracked.** Ang na-install ngayon ay naco-commit
+  ngayon, hindi sa susunod na session.
+- **Kumpirmahin na tumama ang push** — `git -C ~/.claude/skills status --short`
+  ay dapat malinis, at `git -C ~/.claude/skills log --oneline -1` ay ang bagong
+  commit mo. Hindi ito tapos dahil lang hindi nag-error ang `git push`.
+
+### 3. ⛔ HINDI ITO PUMAPASOK SA KAHIT ANONG REPORT
+**Ang pag-update, pag-commit at pag-push ng rules at skills ay walang lugar sa
+alinmang report** — hindi sa `DD-report.md`, hindi sa `-ignore`, hindi sa
+`-local`, at hindi sa isang progress page.
+
+- **Lalo na kapag ang task ay nangailangan ng pag-download at pag-install ng
+  skill.** Ang skill ay kasangkapan, hindi deliverable. Ang report ay tungkol sa
+  produkto — hindi sa kung anong tool ang binuksan para magawa ito.
+- **Hindi rin ito dahilan para magtanong ng report.** Markdown at git
+  housekeeping lang ito: tahimik na ginagawa, tahimik na tinatapos.
+- **Nananatili pa rin ito sa progress percentage**, at may verification pa rin
+  (kumpirmahin ang push) — hindi lang ito sinusulat sa report.
