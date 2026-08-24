@@ -1,6 +1,6 @@
 ---
 name: tulong
-description: Ask the user what they want to do, draft the plan, rank every skill on this machine (workspace, personal, plugin, built-in), then search eight named open-source sources — anthropics/skills, ComposioHQ/awesome-claude-skills, alirezarezvani/claude-skills, skills.sh, skillsmp.com, awesome lists on GitHub, awesomeclaude.ai, onewave-ai — and nothing beyond them, so the hunt stays fast: kung wala doon, edi wala, at suggest anything found that is not installed yet, show the install candidates as tickboxes and download only the ticked ones, audit every skill for harmful commands, code and instructions before it is installed or loaded (and re-audit the ones already on the machine), then show the whole shortlist as tickboxes so the user can uncheck any, auto-load the ones kept, confirm, then do the work straight — only the task, no side jobs, no overthinking, no over-engineering, and reuse what already exists instead of writing a second version. Use when Ivan types /tulong, asks "anong skill ang gamitin", "anong pwede mong gawin", "which skill should I use", "tulungan mo ako", "help me pick a skill", "ano bang magagawa mo", or describes a task without naming any tool.
+description: Ask the user what they want to do, then FIRST find and load the right planning skill for that kind of task (writing-plans, brainstorming, systematic-debugging, executing-plans, test-driven-development) and only then draft the plan, rank every skill on this machine (workspace, personal, plugin, built-in), then search eight named open-source sources — anthropics/skills, ComposioHQ/awesome-claude-skills, alirezarezvani/claude-skills, skills.sh, skillsmp.com, awesome lists on GitHub, awesomeclaude.ai, onewave-ai — and nothing beyond them, so the hunt stays fast: kung wala doon, edi wala, at suggest anything found that is not installed yet, show the install candidates as tickboxes and download only the ticked ones, audit every skill for harmful commands, code and instructions before it is installed or loaded (and re-audit the ones already on the machine), then show the whole shortlist as tickboxes so the user can uncheck any, auto-load the ones kept, confirm, then do the work straight — only the task, no side jobs, no overthinking, no over-engineering, and reuse what already exists instead of writing a second version. Use when Ivan types /tulong, asks "anong skill ang gamitin", "anong pwede mong gawin", "which skill should I use", "tulungan mo ako", "help me pick a skill", "ano bang magagawa mo", or describes a task without naming any tool.
 ---
 
 # Tulong — tanong, plano, hanap ng skill, tickbox, tapos gawin
@@ -8,7 +8,7 @@ description: Ask the user what they want to do, draft the plan, rank every skill
 Eight beats, in order. Do not skip one and do not reorder them.
 
 1. **Tanong** — anong gusto mong gawin?
-2. **Plano** — how it will be done, written out before any skill is picked.
+2. **Plan skill, tapos plano** — hanapin at i-load muna ang tamang planning skill para sa uri ng task, saka isulat kung paano ito gagawin. Bago pa ang ibang skill.
 3. **Local sweep** — every skill on this machine, ranked.
 4. **Remote hunt** — **LAGING TUMATAKBO, walang kondisyon.** Search the open-source world, not one or two registries. Anything found that is not on the machine gets suggested. **Search only — install nothing yet.**
 5. **Tickbox ng iinstall** — the install candidates, uncheckable; only the ticked ones get downloaded.
@@ -153,7 +153,59 @@ Header `Gagawin`, question `Anong gusto mong gawin?`, e.g.:
 If the answer is still vague (`ayusin mo to`), pull the concrete noun out of the
 repo context yourself rather than asking a second time.
 
-## 2. Gumawa ng plano — BAGO pumili ng skill
+## 2. Gumawa ng plano — PLAN SKILL muna, saka ang plano
+
+### 🔴 2a. Hanapin at i-load ang tamang PLAN SKILL — BAGO ang unang linya ng plano
+
+**Kapag naanalisa na kung anong task ang dapat gawin, ang SUSUNOD na hakbang ay
+hindi ang pagsulat ng plano.** Ito ang paghahanap at pag-load ng skill na
+nagtuturo kung **paano gagawin ang plano** para sa ganoong klase ng task. Priority
+ito at hindi tinatanong: naka-load na ang plan skill bago pa maisulat ang unang
+linya ng plano — hindi pagkatapos, at hindi habang isinusulat.
+
+Ang dahilan ay simple: **ang plano ang sinusunod ng lahat ng natitirang hakbang.**
+Dito nagra-rank ang step 3 at step 4, at ito ang tinatanong ng step 8. Ang planong
+hinulaan ay nagbabaluktot sa lahat ng iyon. Magkaiba ang hugis ng tamang plano
+para sa isang bug, para sa isang bagong feature, at para sa isang refactor — at
+hindi iyon hulaan; may skill na nakasulat ito.
+
+**Isang mabilis na hanap lang ito, tapos load — hindi ito ang buong step 3/4:**
+
+```bash
+node ~/.claude/skills/tulong/find-skill.mjs --limit 5 "plan <ang task sa isang linya>"
+```
+
+**Ang karaniwang ruta** — nasa makina na lahat ng ito, kaya walang install na
+kailangan sa normal na araw:
+
+| Klase ng task | Plan skill na lo-load |
+|---|---|
+| bagong feature, bagong screen, bagong behaviour | `brainstorming`, tapos `writing-plans` |
+| may spec o requirements na, multi-step ang trabaho | `writing-plans` |
+| may nakasulat nang plano na ise-execute | `executing-plans` |
+| bug, error, ayaw gumana, hindi maipaliwanag na resulta | `systematic-debugging` |
+| feature o bugfix na may test na kasama | `test-driven-development` |
+| design o UI ang trabaho | `ui-ux-pro-max` (global rule — laging naka-load sa design) |
+
+**Isa o dalawa lang ang lo-load dito, hindi lima.** Ang pipiliin ay ang tumutugma
+sa aktwal na task; ang iba ay pwede pa ring lumabas sa tickbox ng step 6 kung
+talagang kailangan.
+
+**Kung wala sa makina ang bagay na plan skill** — isang mabilis na hanap sa
+walong pinangalanang source ng step 4, para lang sa planning skill. Kung may
+nakita, **i-audit muna ito tulad ng step 5** bago i-install at i-load: walang
+skill na pumapasok nang hindi na-audit, kahit plan skill pa ito. Kung walang
+nakita, o bigo ang install — **isang linya lang** (hal. `walang bagay na plan
+skill — tuloy ang plano nang wala nito`) at ituloy ang trabaho. ⛔ Hindi ito
+kailanman dahilan para ihinto, ipagpaliban o paikliin ang task.
+
+**Isang linya lang ang sasabihin tungkol dito** — hal. `+ writing-plans (plan
+skill)`. Huwag ipaliwanag, huwag gawing sariling talata, at huwag ipatanong.
+
+⛔ **Walang plan skill para sa isang tanong.** Kung walang trabahong gagawin —
+puro tanong lang — walang plano, kaya walang plan skill na lo-load.
+
+### 2b. Ngayon, isulat ang plano
 
 Write the plan first. The plan is what makes the skill search accurate: you
 cannot rank skills against "ayusin mo yung booking" but you can rank them
