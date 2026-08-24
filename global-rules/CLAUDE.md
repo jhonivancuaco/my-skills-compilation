@@ -275,6 +275,46 @@ Sa PickleBallers, ang mekanismo nito ay nasa `/progress-html` skill: mga
 `<!-- GROUP:fixes -->` / `<!-- GROUP:new -->` marker, `data-kind` sa bawat panel,
 at `insert_panels.py --group` na **tumatangging mag-insert kung walang `--group`**.
 
+## 🔴 ANG ANNOTATION SA SCREENSHOT AY KAHON — ANG NUMERO AY NASA BOTTOM-RIGHT CORNER NITO
+**Kapag may minamarkahan sa isang screenshot, hindi ito basta bilog na may
+numero.** Ito ay **parisukat o rektanggulo na nakapalibot sa mismong kontrol na
+pinag-uusapan**, at ang **bilog na may numero ay nakaupo sa bottom-right corner
+ng kahon na iyon.**
+
+| Use | Not |
+|---|---|
+| kahon sa paligid ng button/chip/row/tab, numero sa bottom-right corner nito | bilog na may numero na nakalutang lang sa ibabaw ng screenshot |
+| kahon na kasinlaki ng mismong napipindot, may 2–3px na luwag | maluwag na kahon na nakapalibot sa kalahati ng panel |
+| numero sa **bottom-right** | numero sa top-left, top-right o bottom-left |
+
+- **Ang kahon ang nagdadala ng kahulugan, hindi ang numero.** Ang bilog lang ay
+  tumuturo sa isang punto, at sa siksik na screen ay malabo ang isang punto —
+  ang bumabasa na ang bahalang manghula kung ang **1** ba ay ang button, ang row
+  na kinauupuan nito, o ang panel sa likod ng dalawa. Kapag mali ang hula nila,
+  ang caption ay parang ibang screen ang inilalarawan. Sinasagot ito ng kahon:
+  sinasabi nito nang eksakto kung gaano kalaki ang inaangkin ng numero.
+- **Bottom-right, at hindi ang tatlong iba pang sulok.** Ito ang sulok na
+  palaging bakante — ang sariling label ng kontrol ay tumatakbo pakaliwa, at ang
+  badge, count o value ay nasa top-right. Ito rin ang huling naaabot ng mata,
+  kaya nababasa ang numero **pagkatapos** ng bagay na minarkahan nito, hindi
+  kapalit nito. Nakasakay ang bilog sa mismong sulok — kalahating loob,
+  kalahating labas — para hindi nito matakpan ang tinuturo nito.
+- **Kailangan ng puting halo sa MAGKABILANG gilid ng kulay na guhit.** Madalas
+  kasingkulay ng kahon ang kontrol na kinakahon — asul na kahon sa asul na
+  primary button, coral na kahon sa destructive — at kung nasa labas lang ang
+  halo, nalulusaw ang guhit doon at wala nang minamarkahan ang numero.
+- **Huwag hayaang lumabas ng imahe ang bilog.** Kapag dikit sa gilid ang kahon,
+  i-clamp ang numero papasok para buo pa rin itong nakikita.
+- **Isang annotation ay isang napipindot na bagay.** Hindi minamarkahan ang
+  total, presyo, label, heading o count — binabasa ang mga iyon, hindi
+  pinipindot. (Nauna nang panuntunan ito; hindi ito binabago ng kahon.)
+
+Sa PickleBallers, ang mekanismo nito ay ang `marker_box()` sa
+`.claude/skills/progress-html/scripts/callout.py`: bigyan ang bawat marker ng
+`"rect": [x0,y0,x1,y1]` — na siya mismong `getBoundingClientRect()` ng elemento —
+sa halip na `"at": [x,y]`. Tumatakbo pa rin ang lumang `"at"` para hindi masira
+ang mga naunang spec, pero hindi na ito ginagamit sa bagong figure.
+
 ## NEW TASKS ADD TO THE QUEUE — they never replace the earlier ones
 When a new task arrives while work is already running, it is **appended** to the
 session's task list. It does NOT cancel, replace or push aside anything asked
