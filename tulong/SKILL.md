@@ -1,6 +1,6 @@
 ---
 name: tulong
-description: Ask the user what they want to do, then FIRST find and load the right planning skill for that kind of task (writing-plans, brainstorming, systematic-debugging, executing-plans, test-driven-development) and only then draft the plan, rank every skill on this machine (workspace, personal, plugin, built-in), then search eight named open-source sources — anthropics/skills, ComposioHQ/awesome-claude-skills, alirezarezvani/claude-skills, skills.sh, skillsmp.com, awesome lists on GitHub, awesomeclaude.ai, onewave-ai — and nothing beyond them, so the hunt stays fast: kung wala doon, edi wala, at suggest anything found that is not installed yet, show the install candidates as tickboxes and download only the ticked ones, audit every skill for harmful commands, code and instructions before it is installed or loaded (and re-audit the ones already on the machine), then show the whole shortlist as tickboxes so the user can uncheck any, auto-load the ones kept, confirm, then do the work straight — only the task, no side jobs, no overthinking, no over-engineering, and reuse what already exists instead of writing a second version. Use when Ivan types /tulong, asks "anong skill ang gamitin", "anong pwede mong gawin", "which skill should I use", "tulungan mo ako", "help me pick a skill", "ano bang magagawa mo", or describes a task without naming any tool.
+description: Ask the user what they want to do, then FIRST find and load the right planning skill for that kind of task (writing-plans, brainstorming, systematic-debugging, executing-plans, test-driven-development) and only then draft the plan, rank every skill on this machine (workspace, personal, plugin, built-in), then search eight named open-source sources — anthropics/skills, ComposioHQ/awesome-claude-skills, alirezarezvani/claude-skills, skills.sh, skillsmp.com, awesome lists on GitHub, awesomeclaude.ai, onewave-ai — and nothing beyond them, so the hunt stays fast: kung wala doon, edi wala, at suggest anything found that is not installed yet, show the install candidates as tickboxes and download only the ticked ones, audit every skill for harmful commands, code and instructions before it is installed or loaded (and re-audit the ones already on the machine), then show the whole shortlist as tickboxes so the user can uncheck any — with a `Lahat na` option that ticks every one of them in a single click — auto-load the ones kept, confirm, then do the work straight — only the task, no side jobs, no overthinking, no over-engineering, and reuse what already exists instead of writing a second version. Use when Ivan types /tulong, asks "anong skill ang gamitin", "anong pwede mong gawin", "which skill should I use", "tulungan mo ako", "help me pick a skill", "ano bang magagawa mo", or describes a task without naming any tool.
 ---
 
 # Tulong — tanong, plano, hanap ng skill, tickbox, tapos gawin
@@ -12,7 +12,7 @@ Eight beats, in order. Do not skip one and do not reorder them.
 3. **Local sweep** — every skill on this machine, ranked.
 4. **Remote hunt** — **LAGING TUMATAKBO, walang kondisyon.** Search the open-source world, not one or two registries. Anything found that is not on the machine gets suggested. **Search only — install nothing yet.**
 5. **Tickbox ng iinstall** — the install candidates, uncheckable; only the ticked ones get downloaded.
-6. **Tickbox ng gagamitin** — the full shortlist, uncheckable.
+6. **Tickbox ng gagamitin** — the full shortlist, uncheckable, plus a **`Lahat na`** option that ticks every one of them in one go.
 7. **Auto-load** — load the kept ones into this session, **plus `verification-before-completion` always** (never a tickbox).
 8. **Go?** — confirm, then start the plan.
 
@@ -717,8 +717,8 @@ Report the result in one line — `2 na-install: playwright-testing, stripe-webh
 ## 6. Ipakita lahat — tickboxes ng gagamitin
 
 One `AskUserQuestion` with **`multiSelect: true`**. Every candidate from step 3
-and every skill actually installed in step 5 goes in. Ivan ticks what he wants
-used and leaves out the rest.
+and every skill actually installed in step 5 goes in — **the best 3**, plus the
+`Lahat na` option below. Ivan ticks what he wants used and leaves out the rest.
 
 - Header `Skills`, question `Alin ang gagamitin? (alisan ng tick ang ayaw mo)`.
 - **Order by recommendation, best first.** Put `(Recommended)` at the end of the
@@ -738,6 +738,37 @@ used and leaves out the rest.
 **A step-5 tick is not a step-6 tick.** Something just installed still has to be
 ticked here to be used — mark it `(Recommended)`, since Ivan approving the
 download is a strong signal, but do not treat it as already chosen.
+
+### ✅ `Lahat na` — isang tik para sa buong listahan
+
+**Ang huling option ng tanong ay palaging `Lahat na — gamitin lahat ng nasa
+listahan`.** Isang tik at gagamitin ang lahat ng nasa itaas nito; hindi na
+kailangang tikan isa-isa ang tatlo.
+
+- **Huling option, hindi una.** Ang mga skill ang binabasa; ang shortcut ay nasa
+  dulo, pagkatapos maisip ni Ivan ang bawat isa.
+- **Kaya ang shortlist dito ay `at most 3`, hindi 4** — apat ang pinakamarami na
+  kayang ipakita ng `AskUserQuestion`, at isa doon ay kinukuha na ng `Lahat na`.
+  Kung mas marami ang pumasa sa ranking, putulin sa pinakamahusay na tatlo at
+  sabihin sa isang linya kung ano ang natanggal at bakit.
+- **Hindi ito lumalabas kapag isa lang ang laman ng listahan.** Walang "lahat" sa
+  isang bagay — pareho lang ang bilang ng pindot, at option na walang ibig sabihin
+  ang labas nito.
+- `description`: `I-load lahat ng nasa itaas — hindi na kailangang tikan isa-isa.`
+- ⛔ **Walang `(Recommended)` dito.** Hindi ito rekomendasyon, shortcut ito. Ang
+  `(Recommended)` ay nananatili sa mga skill mismo, kaya kahit tikan ang `Lahat
+  na` ay nakikita pa rin kung alin ang talagang kailangan ng plano.
+
+**Kapag tinik ang `Lahat na`, ito ang panalo.** Naka-load ang lahat ng nasa
+listahan kahit may naiwang hindi tinik — sinasabi ng `Lahat na` ang *lahat*, kaya
+ang pag-honor sa isang unticked box ay ginagawa itong sinungaling. Sabihin sa
+isang linya kung ilan ang na-load dahil dito.
+
+⛔ **Ang `Lahat na` ay hindi nag-iinstall at hindi nagpapalaki ng listahan.** Ang
+saklaw nito ay ang mga option na nakikita sa tanong na ito at wala nang iba —
+hindi ang ika-apat na pinutol sa ranking, hindi ang hindi tinik sa step 5, at
+hindi ang `verification-before-completion` (wala ito sa listahan dahil awtomatiko
+ito sa step 7).
 
 ## 7. Auto-load sa session
 
