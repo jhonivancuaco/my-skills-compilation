@@ -235,7 +235,7 @@ Do **not** ask about the plan here. Step 8 is where it gets confirmed.
 ## 3. Local sweep — lahat ng nasa makina
 
 ```bash
-node ~/.claude/skills/tulong/find-skill.mjs "<the task + the plan's key nouns>"
+node ~/.claude/skills/tulong/find-skill.mjs --limit 20 "<the task + the plan's key nouns>"
 ```
 
 Feed it the task **and** the plan's concrete nouns — that is what makes this
@@ -248,13 +248,19 @@ skills are seen. In the PickleBallers workspace that is both trees:
 node ~/.claude/skills/tulong/find-skill.mjs \
   --root /Users/jhonivancuaco/Documents/PICKLEBALLER-WORKSPACE/live \
   --root /Users/jhonivancuaco/Documents/PICKLEBALLER-WORKSPACE/staging \
-  --limit 10 \
+  --limit 20 \
   "timezone bug sa booking availability endpoint, ayusin sa api at PWA at web"
 ```
 
 Other flags: `--list` (browse everything by source), `--json` (structured),
 `--limit N` (default 6), `--depth N` (nested `.claude/skills/` scan depth,
 default 3).
+
+⛔ **Huwag hayaang ang ranker ang maging cap.** `--limit` ang default na **6**,
+at ang hindi naka-print ay hindi mairerekomenda — kaya **`--limit 20`** ang
+tumatakbo, hindi ang default. Ang step 6 ay nagtatanong ng alon-alon hangga't
+naubos ang listahan, kaya ang pagpigil ay nasa `pts > 3` at sa kalidad, hindi sa
+isang display cap na hindi nakikita ni Ivan.
 
 Output per match: `name [source · invocable|REFERENCE-ONLY] score`, a `why:`
 line naming the exact tokens that hit, the description, and the path.
