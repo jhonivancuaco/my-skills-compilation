@@ -1,6 +1,6 @@
 ---
 name: tulong
-description: Ask the user what they want to do, then FIRST find and load the right planning skill for that kind of task (writing-plans, brainstorming, systematic-debugging, executing-plans, test-driven-development) and only then draft the plan, rank every skill on this machine (workspace, personal, plugin, built-in), then search eight named open-source sources — anthropics/skills, ComposioHQ/awesome-claude-skills, alirezarezvani/claude-skills, skills.sh, skillsmp.com, awesome lists on GitHub, awesomeclaude.ai, onewave-ai — and nothing beyond them, so the hunt stays fast: kung wala doon, edi wala, at suggest anything found that is not installed yet, show the install candidates as tickboxes four at a time and ask again wave after wave until every candidate has been offered, downloading only the ticked ones, audit every skill for harmful commands, code and instructions before it is installed or loaded (and re-audit the ones already on the machine), then show EVERY skill that passed the ranking as tickboxes — four per question, asked again wave after wave until nothing is left unoffered, so no recommendation ever goes unsaid and no slot is spent on a shortcut — auto-load the ones kept in ONE bulk call reported as a single line (never one announcement per skill), confirm, then do the work straight — only the task, no side jobs, no overthinking, no over-engineering, and reuse what already exists instead of writing a second version. Use when Ivan types /tulong, asks "anong skill ang gamitin", "anong pwede mong gawin", "which skill should I use", "tulungan mo ako", "help me pick a skill", "ano bang magagawa mo", or describes a task without naming any tool.
+description: Ask the user what they want to do, then FIRST find and load the right planning skill for that kind of task (writing-plans, brainstorming, systematic-debugging, executing-plans, test-driven-development) and only then draft the plan, rank every skill on this machine (workspace, personal, plugin, built-in), then search eight named open-source sources — anthropics/skills, ComposioHQ/awesome-claude-skills, alirezarezvani/claude-skills, skills.sh, skillsmp.com, awesome lists on GitHub, awesomeclaude.ai, onewave-ai — and nothing beyond them, so the hunt stays fast: kung wala doon, edi wala, at suggest anything found that is not installed yet, show the install candidates as tickboxes four at a time and ask again wave after wave until every candidate has been offered, downloading only the ticked ones, audit every skill for harmful commands, code and instructions before it is installed or loaded (and re-audit the ones already on the machine), then show EVERY skill that passed the ranking as tickboxes — four per question, asked again wave after wave until nothing is left unoffered, so no recommendation ever goes unsaid and no slot is spent on a shortcut — auto-load the ones kept in ONE bulk call and say nothing about it afterwards — the UI already renders one row per loaded skill, so a text list only repeats it, confirm, then do the work straight — only the task, no side jobs, no overthinking, no over-engineering, and reuse what already exists instead of writing a second version. Use when Ivan types /tulong, asks "anong skill ang gamitin", "anong pwede mong gawin", "which skill should I use", "tulungan mo ako", "help me pick a skill", "ano bang magagawa mo", or describes a task without naming any tool.
 ---
 
 # Tulong — tanong, plano, hanap ng skill, tickbox, tapos gawin
@@ -13,7 +13,7 @@ Eight beats, in order. Do not skip one and do not reorder them.
 4. **Remote hunt** — **LAGING TUMATAKBO, walang kondisyon.** Search the open-source world, not one or two registries. Anything found that is not on the machine gets suggested. **Search only — install nothing yet.**
 5. **Tickbox ng iinstall** — the install candidates, uncheckable; only the ticked ones get downloaded.
 6. **Tickbox ng gagamitin** — **lahat** ng pumasa sa ranking, alon-alon na tig-4, hangga't naubos ang listahan. Walang rekomendasyong hindi naibigay, at walang option na nauubos sa shortcut.
-7. **Auto-load** — **isang bulk load, isang linya**: lahat ng tinik sa isang mensahe, sabay-sabay, **plus `verification-before-completion` always** (never a tickbox).
+7. **Auto-load** — **isang bulk load, walang sinasabi**: lahat ng tinik sa isang mensahe, sabay-sabay, **plus `verification-before-completion` always** (never a tickbox). Ang UI na ang nagpapakita ng na-load.
 8. **Go?** — confirm, then start the plan.
 
 Steps 1, 5, 6 and 8 are the **only** four moments this skill asks anything.
@@ -869,11 +869,21 @@ nasa disk na ito.**
 - Ilista sila sa order na gagamitin — builder first, reviewer last. **Order ng
   pangalan lang iyon**, hindi order ng mensahe: sabay-sabay pa rin ang load.
 
-### 🔴 ISANG BULK LOAD, ISANG LINYA — hindi isa-isang anunsyo
+### 🔴 ISANG BULK LOAD, ZERO LINYA — ang UI na ang nagpapakita
 
 **Lahat ng `Skill()` call ay nasa ISANG mensahe, sabay-sabay** — pati ang
-laging-naka-load na `verification-before-completion`. Walang isa-isang turn,
-walang isa-isang anunsyo, at isang linya lang ang sinasabi pagkatapos ng lahat.
+laging-naka-load na `verification-before-completion`. Walang isa-isang turn at
+walang isa-isang anunsyo.
+
+**Tapos, wala nang sasabihin.** Ang harness mismo ang nagre-render ng isang row
+kada na-load na skill — `● ui-ux-pro-max  skill` — kaya ang isang linyang
+`Naka-load (4): …` ay pag-ulit lang ng nakikita na, at doble ang haba nito sa
+usapan kaysa sa tinatapos nito. **Default: walang report line.**
+
+⚠️ **Hindi maaalis ang mga row na iyon** — sa UI galing yun, hindi sa akin. Ang
+tanging bahagi na kontrolado ko ay ang teksto sa paligid nito, kaya iyon ang
+tinatanggal: **ang bilang ng row ay ang bilang ng tinik ni Ivan, at ang teksto ay
+wala.**
 
 ⛔ **Ito ang bawal**, at pare-pareho ang dahilan — pahaba lang sa usapan nang
 walang bagong sinasabi:
@@ -881,25 +891,28 @@ walang bagong sinasabi:
 | ⛔ Bawal | ✅ Sa halip |
 |---|---|
 | `Ilo-load ko na ang systematic-debugging…` bago ang bawat call | Walang preamble. Tawagin na lahat |
-| `✅ Naka-load ang ui-ux-pro-max` pagkatapos ng bawat call | Isang linya sa dulo, buong listahan |
+| `✅ Naka-load ang ui-ux-pro-max` pagkatapos ng bawat call | Wala. Nasa UI na iyon |
+| `Naka-load (4): a → b → c, + verification-before-completion` | Wala. Inuulit lang nito ang apat na row sa itaas |
 | Isang talata kada skill kung bakit ito kailangan | Nasa `description` na iyon ng tickbox — nabasa na niya |
 | Isang `Skill()` kada mensahe, apat na mensahe | Apat na `Skill()` sa isang mensahe |
-| Sariling linya para sa `verification-before-completion` | Kasama sa parehong linya, may `+` |
+| Sariling linya para sa `verification-before-completion` | Wala rin. May sariling row na iyon |
 
-**Ang isang linya, buo:**
+**Tatlo lang ang dahilan para magsalita, at isang maikling sugnay lang ang bawat
+isa — hindi sariling talata, hindi bullet list:**
 
-> Naka-load (4): **systematic-debugging** → **ui-ux-pro-max** → **code-review**,
-> + `verification-before-completion`.
+| Kailan | Ano ang sinasabi |
+|---|---|
+| may bigong load | `(hindi na-load: X — wala sa disk)` |
+| `REFERENCE-ONLY` — hindi `Skill()`-able, kaya walang row nito sa UI | `+ web-design-guidelines [reference, binasa]` |
+| tinanggal ang #1 sa ranking | `idiot-tester ang #1 pero QA persona iyon` |
 
-- **Walang paliwanag kada skill.** Ang `why:` ay nasa tickbox pa noong pinipili —
-  ang pag-ulit nito pagkatapos ay pagbabasa ng bagay na nabasa na.
-- **Kung may bigong load, isang sub-clause sa parehong linya** —
-  `(hindi na-load: X — wala sa disk)`. Hindi bagong talata, hindi retry, at hindi
-  paghinto ng flow.
-- **Ang `REFERENCE-ONLY` ay `Read` sa parehong bulk na mensahe**, at kasama sa
-  parehong linya na may tag: `+ web-design-guidelines [reference]`.
-- **Kung may talagang kailangang sabihin** — hal. tinanggal ang #1 sa ranking —
-  isang sugnay lang iyon sa dulo ng parehong linya, hindi sariling talata.
+- **Walang report line kapag wala sa tatlong iyon.** Diretso na sa step 8 —
+  nakikita na niya ang mga row, at ang plano ang susunod na kailangang basahin.
+- **Walang paliwanag kada skill, kahit sa loob ng mga exception.** Ang `why:` ay
+  nasa tickbox pa noong pinipili; ang pag-ulit nito pagkatapos ay pagbabasa ng
+  bagay na nabasa na.
+- **Ang bigong load ay hindi rin retry at hindi paghinto** — isang sugnay, tuloy
+  ang flow.
 
 ### `verification-before-completion` — laging naka-load, hindi tinatanong
 
