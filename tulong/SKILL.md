@@ -1,6 +1,6 @@
 ---
 name: tulong
-description: Ask the user what they want to do, then FIRST find and load the right planning skill for that kind of task (writing-plans, brainstorming, systematic-debugging, executing-plans, test-driven-development) and only then draft the plan, rank every skill on this machine (workspace, personal, plugin, built-in), then search eight named open-source sources — anthropics/skills, ComposioHQ/awesome-claude-skills, alirezarezvani/claude-skills, skills.sh, skillsmp.com, awesome lists on GitHub, awesomeclaude.ai, onewave-ai — and nothing beyond them, so the hunt stays fast: kung wala doon, edi wala, at suggest anything found that is not installed yet, show the install candidates as tickboxes four at a time and ask again wave after wave until every candidate has been offered, downloading only the ticked ones, audit every skill for harmful commands, code and instructions before it is installed or loaded (and re-audit the ones already on the machine), then show EVERY skill that passed the ranking as tickboxes — four per question, asked again wave after wave until nothing is left unoffered, so no recommendation ever goes unsaid and no slot is spent on a shortcut — auto-load the ones kept, confirm, then do the work straight — only the task, no side jobs, no overthinking, no over-engineering, and reuse what already exists instead of writing a second version. Use when Ivan types /tulong, asks "anong skill ang gamitin", "anong pwede mong gawin", "which skill should I use", "tulungan mo ako", "help me pick a skill", "ano bang magagawa mo", or describes a task without naming any tool.
+description: Ask the user what they want to do, then FIRST find and load the right planning skill for that kind of task (writing-plans, brainstorming, systematic-debugging, executing-plans, test-driven-development) and only then draft the plan, rank every skill on this machine (workspace, personal, plugin, built-in), then search eight named open-source sources — anthropics/skills, ComposioHQ/awesome-claude-skills, alirezarezvani/claude-skills, skills.sh, skillsmp.com, awesome lists on GitHub, awesomeclaude.ai, onewave-ai — and nothing beyond them, so the hunt stays fast: kung wala doon, edi wala, at suggest anything found that is not installed yet, show the install candidates as tickboxes four at a time and ask again wave after wave until every candidate has been offered, downloading only the ticked ones, audit every skill for harmful commands, code and instructions before it is installed or loaded (and re-audit the ones already on the machine), then show EVERY skill that passed the ranking as tickboxes — four per question, asked again wave after wave until nothing is left unoffered, so no recommendation ever goes unsaid and no slot is spent on a shortcut — auto-load the ones kept in ONE bulk call reported as a single line (never one announcement per skill), confirm, then do the work straight — only the task, no side jobs, no overthinking, no over-engineering, and reuse what already exists instead of writing a second version. Use when Ivan types /tulong, asks "anong skill ang gamitin", "anong pwede mong gawin", "which skill should I use", "tulungan mo ako", "help me pick a skill", "ano bang magagawa mo", or describes a task without naming any tool.
 ---
 
 # Tulong — tanong, plano, hanap ng skill, tickbox, tapos gawin
@@ -13,7 +13,7 @@ Eight beats, in order. Do not skip one and do not reorder them.
 4. **Remote hunt** — **LAGING TUMATAKBO, walang kondisyon.** Search the open-source world, not one or two registries. Anything found that is not on the machine gets suggested. **Search only — install nothing yet.**
 5. **Tickbox ng iinstall** — the install candidates, uncheckable; only the ticked ones get downloaded.
 6. **Tickbox ng gagamitin** — **lahat** ng pumasa sa ranking, alon-alon na tig-4, hangga't naubos ang listahan. Walang rekomendasyong hindi naibigay, at walang option na nauubos sa shortcut.
-7. **Auto-load** — load the kept ones into this session, **plus `verification-before-completion` always** (never a tickbox).
+7. **Auto-load** — **isang bulk load, isang linya**: lahat ng tinik sa isang mensahe, sabay-sabay, **plus `verification-before-completion` always** (never a tickbox).
 8. **Go?** — confirm, then start the plan.
 
 Steps 1, 5, 6 and 8 are the **only** four moments this skill asks anything.
@@ -866,7 +866,40 @@ nasa disk na ito.**
 - Freshly installed ones → `Skill({ skill: "<name>" })` works the moment the
   directory exists; if it errors, `Read` `~/.claude/skills/<name>/SKILL.md`
   instead and carry on. Do not restart the session over it.
-- Load them in the order they will be used — builder first, reviewer last.
+- Ilista sila sa order na gagamitin — builder first, reviewer last. **Order ng
+  pangalan lang iyon**, hindi order ng mensahe: sabay-sabay pa rin ang load.
+
+### 🔴 ISANG BULK LOAD, ISANG LINYA — hindi isa-isang anunsyo
+
+**Lahat ng `Skill()` call ay nasa ISANG mensahe, sabay-sabay** — pati ang
+laging-naka-load na `verification-before-completion`. Walang isa-isang turn,
+walang isa-isang anunsyo, at isang linya lang ang sinasabi pagkatapos ng lahat.
+
+⛔ **Ito ang bawal**, at pare-pareho ang dahilan — pahaba lang sa usapan nang
+walang bagong sinasabi:
+
+| ⛔ Bawal | ✅ Sa halip |
+|---|---|
+| `Ilo-load ko na ang systematic-debugging…` bago ang bawat call | Walang preamble. Tawagin na lahat |
+| `✅ Naka-load ang ui-ux-pro-max` pagkatapos ng bawat call | Isang linya sa dulo, buong listahan |
+| Isang talata kada skill kung bakit ito kailangan | Nasa `description` na iyon ng tickbox — nabasa na niya |
+| Isang `Skill()` kada mensahe, apat na mensahe | Apat na `Skill()` sa isang mensahe |
+| Sariling linya para sa `verification-before-completion` | Kasama sa parehong linya, may `+` |
+
+**Ang isang linya, buo:**
+
+> Naka-load (4): **systematic-debugging** → **ui-ux-pro-max** → **code-review**,
+> + `verification-before-completion`.
+
+- **Walang paliwanag kada skill.** Ang `why:` ay nasa tickbox pa noong pinipili —
+  ang pag-ulit nito pagkatapos ay pagbabasa ng bagay na nabasa na.
+- **Kung may bigong load, isang sub-clause sa parehong linya** —
+  `(hindi na-load: X — wala sa disk)`. Hindi bagong talata, hindi retry, at hindi
+  paghinto ng flow.
+- **Ang `REFERENCE-ONLY` ay `Read` sa parehong bulk na mensahe**, at kasama sa
+  parehong linya na may tag: `+ web-design-guidelines [reference]`.
+- **Kung may talagang kailangang sabihin** — hal. tinanggal ang #1 sa ranking —
+  isang sugnay lang iyon sa dulo ng parehong linya, hindi sariling talata.
 
 ### `verification-before-completion` — laging naka-load, hindi tinatanong
 
@@ -885,16 +918,9 @@ Skill({ skill: "verification-before-completion" })
   na sa registry), **huwag nang pilitin.** Sabihin sa isang linya na wala ito,
   huwag i-load, at ituloy ang trabaho nang wala nito. Hindi ito dahilan para
   ihinto ang task, at hindi ito sinusubukan muli sa parehong session.
-- **Isang linya lang ang sasabihin tungkol dito** — hal. `+
-  verification-before-completion (laging naka-load)`. Huwag ipaliwanag,
-  huwag ipagtanggol, huwag gawing sariling talata.
-
-Then say, in one or two lines, what got loaded and why that order:
-
-> Naka-load: **systematic-debugging** (hanapin ang ugat ng timezone bug) →
-> **ui-ux-pro-max** (ayusin ang screen) → **code-review** (bago i-deploy).
-> `idiot-tester` ang #1 sa ranking pero QA persona 'yon, at ang hiningi mo ay
-> ayusin, hindi suriin.
+- **Walang sariling linya at walang sariling mensahe.** Kasama ito sa parehong
+  bulk na `Skill()` call at sa parehong isang linya ng report, may `+` sa harap.
+  Huwag ipaliwanag, huwag ipagtanggol, huwag gawing sariling talata.
 
 Once a skill is loaded, **its instructions outrank this file** for the work
 itself. This file still owns step 8.
