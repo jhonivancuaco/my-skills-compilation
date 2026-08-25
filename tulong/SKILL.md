@@ -1,6 +1,6 @@
 ---
 name: tulong
-description: Ask the user what they want to do, then FIRST find and load the right planning skill for that kind of task (writing-plans, brainstorming, systematic-debugging, executing-plans, test-driven-development) and only then draft the plan, rank every skill on this machine (workspace, personal, plugin, built-in), then search eight named open-source sources — anthropics/skills, ComposioHQ/awesome-claude-skills, alirezarezvani/claude-skills, skills.sh, skillsmp.com, awesome lists on GitHub, awesomeclaude.ai, onewave-ai — and nothing beyond them, so the hunt stays fast: kung wala doon, edi wala, at suggest anything found that is not installed yet, show the install candidates as tickboxes and download only the ticked ones, audit every skill for harmful commands, code and instructions before it is installed or loaded (and re-audit the ones already on the machine), then show the whole shortlist as tickboxes so the user can uncheck any — with a `Lahat na` option that ticks every one of them in a single click — auto-load the ones kept, confirm, then do the work straight — only the task, no side jobs, no overthinking, no over-engineering, and reuse what already exists instead of writing a second version. Use when Ivan types /tulong, asks "anong skill ang gamitin", "anong pwede mong gawin", "which skill should I use", "tulungan mo ako", "help me pick a skill", "ano bang magagawa mo", or describes a task without naming any tool.
+description: Ask the user what they want to do, then FIRST find and load the right planning skill for that kind of task (writing-plans, brainstorming, systematic-debugging, executing-plans, test-driven-development) and only then draft the plan, rank every skill on this machine (workspace, personal, plugin, built-in), then search eight named open-source sources — anthropics/skills, ComposioHQ/awesome-claude-skills, alirezarezvani/claude-skills, skills.sh, skillsmp.com, awesome lists on GitHub, awesomeclaude.ai, onewave-ai — and nothing beyond them, so the hunt stays fast: kung wala doon, edi wala, at suggest anything found that is not installed yet, show the install candidates as tickboxes four at a time and ask again wave after wave until every candidate has been offered, downloading only the ticked ones, audit every skill for harmful commands, code and instructions before it is installed or loaded (and re-audit the ones already on the machine), then show EVERY skill that passed the ranking as tickboxes — four per question, asked again wave after wave until nothing is left unoffered, so no recommendation ever goes unsaid and no slot is spent on a shortcut — auto-load the ones kept, confirm, then do the work straight — only the task, no side jobs, no overthinking, no over-engineering, and reuse what already exists instead of writing a second version. Use when Ivan types /tulong, asks "anong skill ang gamitin", "anong pwede mong gawin", "which skill should I use", "tulungan mo ako", "help me pick a skill", "ano bang magagawa mo", or describes a task without naming any tool.
 ---
 
 # Tulong — tanong, plano, hanap ng skill, tickbox, tapos gawin
@@ -12,12 +12,17 @@ Eight beats, in order. Do not skip one and do not reorder them.
 3. **Local sweep** — every skill on this machine, ranked.
 4. **Remote hunt** — **LAGING TUMATAKBO, walang kondisyon.** Search the open-source world, not one or two registries. Anything found that is not on the machine gets suggested. **Search only — install nothing yet.**
 5. **Tickbox ng iinstall** — the install candidates, uncheckable; only the ticked ones get downloaded.
-6. **Tickbox ng gagamitin** — the full shortlist, uncheckable, plus a **`Lahat na`** option that ticks every one of them in one go.
+6. **Tickbox ng gagamitin** — **lahat** ng pumasa sa ranking, alon-alon na tig-4, hangga't naubos ang listahan. Walang rekomendasyong hindi naibigay, at walang option na nauubos sa shortcut.
 7. **Auto-load** — load the kept ones into this session, **plus `verification-before-completion` always** (never a tickbox).
 8. **Go?** — confirm, then start the plan.
 
-Steps 1, 5, 6 and 8 are the **only** four times this skill asks anything.
+Steps 1, 5, 6 and 8 are the **only** four moments this skill asks anything.
 Everything between them runs without prompting.
+
+**Moments, not questions.** Steps 5 and 6 **repeat** — tig-4 na option kada
+tanong — hangga't naubos ang listahan. Apat lang ang kasya sa isang
+`AskUserQuestion`, at hindi iyon dahilan para may rekomendasyong hindi nasabi:
+ang sagot sa sikip ay isa pang tanong, hindi isang mas maikling listahan.
 
 **Two separate tickboxes, on purpose.** Step 5 asks *what may be downloaded onto
 the machine*; step 6 asks *what gets used for this job*. They are different
@@ -518,10 +523,21 @@ ang paghalo sa kanila ang pinakamadaling paraan para mapuno ng basura ang
 
 ### Build the candidate list
 
-Shortlist **at most 4** — that is one tickbox question, and more than a handful
-of new skills for one job means the plan is too broad, not that the machine is
-short of skills. A search this wide will often return more than four worth a
-look; cut to the best four and say in one line what was dropped.
+**Walang cap sa listahan.** Bawat kandidatong tunay na naglilingkod sa isang
+numbered step ng plano ay pumapasok — ranked, pinakamahusay sa unahan. Ang
+tickbox ang naghahati nito sa alon (step 5), hindi ang listahan ang pinuputol
+para magkasya sa isang tanong.
+
+⛔ **Never trim the list to fit the question.** Apat lang ang kasya sa isang
+`AskUserQuestion`; limitasyon iyon ng **tanong**, hindi ng rekomendasyon. Ang
+pagputol sa "pinakamahusay na apat" ay tahimik na nagtatapon ng nahanap na sulit
+— pinagbuhusan ng oras ang paghahanap sa walong pinagkukunan, tapos ang hugis ng
+isang tickbox ang magpapasya kung ilan ang makikita ni Ivan.
+
+**Ang pagpigil ay nasa kalidad, hindi sa bilang.** Ang table sa itaas ang
+nagtatanggal ng hindi kandidato — walang trust signal, hindi mabasa ang
+`SKILL.md`, o may local nang sumasaklaw. Kung tatlo lang ang pumasa, tatlo;
+huwag dagdagan para lang mapuno ang isang alon.
 
 | Field | Where it comes from |
 |---|---|
@@ -552,8 +568,20 @@ step 4. Nothing reaches the disk until this comes back.
 - The `description` is **why it is being installed** — the numbered plan step it
   serves — plus the repo it comes from, so the origin is visible before the tick.
 - Flag `[COLLISION — papatong sa /<name>]` on any name clash from step 4.
-- Max 4 options, so max 4 install candidates. If the hunt turned up more, cut to
-  the best 4 and say in one line what was dropped.
+- **Apat na option kada tanong — kaya alon-alon, hindi pinuputol.** Anim ang
+  kandidato? Dalawang tanong: `Alin ang iinstall? (4 sa 6 — alon 1/2)`, tapos ang
+  natitirang dalawa. Ranked, kaya ang unang alon ang may pinakamahusay.
+- **Sabihin ang buong bilang sa unang alon** — `6 na kandidato: 2 tanong, tig-4`
+  — para alam agad ni Ivan kung ilan ang paparating.
+- **Ang susunod na alon ay itinatanong AGAD**, sa parehong turn, nang walang
+  paghingi ng pahintulot at nang walang `may 2 pa, sabihin mo lang`. Ang alon na
+  walang natik ay hindi paghinto — wala lang sa apat na iyon ang bagay.
+- **Ang natapos na alon ay tapos na.** Ang hindi tinik ay hindi na muling
+  itinatanong sa parehong run.
+- ⛔ **Walang `I-install lahat` na option dito** — kagaya ng step 6, walang
+  shortcut na kumakain ng slot. Apat na kandidato ang laman ng bawat alon, at ang
+  one-tap na "ilagay lahat" ang eksaktong paraan para mapuno ng basura ang
+  `~/.claude/skills/` — tinik isa-isa.
 
 **Unticked means never downloaded.** Do not install it "just in case", do not
 install it and leave it unloaded, and do not re-propose it later in the same
@@ -716,9 +744,12 @@ Report the result in one line — `2 na-install: playwright-testing, stripe-webh
 
 ## 6. Ipakita lahat — tickboxes ng gagamitin
 
-One `AskUserQuestion` with **`multiSelect: true`**. Every candidate from step 3
-and every skill actually installed in step 5 goes in — **the best 3**, plus the
-`Lahat na` option below. Ivan ticks what he wants used and leaves out the rest.
+`AskUserQuestion` with **`multiSelect: true`** — **isa kada alon, tig-4 na
+skill, walang shortcut na kumakain ng slot.** Every candidate from step 3 and
+every skill actually installed in step 5 goes in, at **lahat sila ay
+naibibigay**: kapag mahigit apat ang pumasa, isa pang tanong ang kasunod — hindi
+isang mas maikling listahan. Ivan ticks what he wants used and leaves out the
+rest.
 
 - Header `Skills`, question `Alin ang gagamitin? (alisan ng tick ang ayaw mo)`.
 - **Order by recommendation, best first.** Put `(Recommended)` at the end of the
@@ -739,36 +770,73 @@ and every skill actually installed in step 5 goes in — **the best 3**, plus th
 ticked here to be used — mark it `(Recommended)`, since Ivan approving the
 download is a strong signal, but do not treat it as already chosen.
 
-### ✅ `Lahat na` — isang tik para sa buong listahan
+### 🔴 WALANG REKOMENDASYONG HINDI NAIBIGAY — alon-alon hangga't maubos
 
-**Ang huling option ng tanong ay palaging `Lahat na — gamitin lahat ng nasa
-listahan`.** Isang tik at gagamitin ang lahat ng nasa itaas nito; hindi na
-kailangang tikan isa-isa ang tatlo.
+**Apat na skill ang laman ng isang alon — apat ang pinakamarami na kayang ipakita
+ng `AskUserQuestion`. Hindi iyon ang bilang ng pwedeng irekomenda.** Anim, siyam
+o labindalawa ang pumasa sa ranking? Lahat ng iyon ay naibibigay; hinahati lang
+sa sunod-sunod na tanong.
 
-- **Huling option, hindi una.** Ang mga skill ang binabasa; ang shortcut ay nasa
-  dulo, pagkatapos maisip ni Ivan ang bawat isa.
-- **Kaya ang shortlist dito ay `at most 3`, hindi 4** — apat ang pinakamarami na
-  kayang ipakita ng `AskUserQuestion`, at isa doon ay kinukuha na ng `Lahat na`.
-  Kung mas marami ang pumasa sa ranking, putulin sa pinakamahusay na tatlo at
-  sabihin sa isang linya kung ano ang natanggal at bakit.
-- **Hindi ito lumalabas kapag isa lang ang laman ng listahan.** Walang "lahat" sa
-  isang bagay — pareho lang ang bilang ng pindot, at option na walang ibig sabihin
-  ang labas nito.
-- `description`: `I-load lahat ng nasa itaas — hindi na kailangang tikan isa-isa.`
-- ⛔ **Walang `(Recommended)` dito.** Hindi ito rekomendasyon, shortcut ito. Ang
-  `(Recommended)` ay nananatili sa mga skill mismo, kaya kahit tikan ang `Lahat
-  na` ay nakikita pa rin kung alin ang talagang kailangan ng plano.
+⛔ **Ang pagputol sa "pinakamahusay na tatlo o apat" ay bug, hindi pagtitipid.**
+Iyon ang eksaktong pagkakamaling binubuwag ng seksyong ito: binuhusan ng oras ng
+step 3 at 4 ang paghahanap sa buong makina at sa walong pinagkukunan, tapos ang
+hugis ng isang tickbox ang magtatapon ng dalawang-katlo ng nakita — at hindi man
+lang malalaman ni Ivan na may naitapon. **Ang limitasyon ay nasa tanong, hindi sa
+rekomendasyon**, at ang sagot sa sikip ay isa pang tanong.
 
-**Kapag tinik ang `Lahat na`, ito ang panalo.** Naka-load ang lahat ng nasa
-listahan kahit may naiwang hindi tinik — sinasabi ng `Lahat na` ang *lahat*, kaya
-ang pag-honor sa isang unticked box ay ginagawa itong sinungaling. Sabihin sa
-isang linya kung ilan ang na-load dahil dito.
+**Paano ito tumatakbo:**
 
-⛔ **Ang `Lahat na` ay hindi nag-iinstall at hindi nagpapalaki ng listahan.** Ang
-saklaw nito ay ang mga option na nakikita sa tanong na ito at wala nang iba —
-hindi ang ika-apat na pinutol sa ranking, hindi ang hindi tinik sa step 5, at
-hindi ang `verification-before-completion` (wala ito sa listahan dahil awtomatiko
-ito sa step 7).
+1. **Bilangin ang buong listahan at sabihin ito bago ang unang tanong** —
+   `9 na skill ang bagay sa plano: 3 tanong, tig-4.` Kaya alam agad ni Ivan kung
+   ilan ang paparating, at hindi mukhang huli ang unang tanong.
+2. **Ranked, pinakamahusay sa unahan.** Alon 1 = top 4. Kapag tumigil siya
+   pagkatapos ng isang alon, ang naiwan ay ang pinakamahina — hindi ang
+   pinakakailangan.
+3. **Nakasulat sa tanong kung saan ito nakatayo** — `Alin ang gagamitin?
+   (4 sa 9 — alon 1/3)`.
+4. **Nagsasalansan ang tik.** Ang tinik sa alon 1 ay nananatiling tinik habang
+   tinatanong ang alon 2. **Union** ang final set, hindi ang huling sagot.
+5. **Ang susunod na alon ay itinatanong AGAD** — sa parehong turn, nang walang
+   paghingi ng pahintulot. ⛔ Walang `may 5 pa, sabihin mo lang kung gusto mong
+   makita`: ibinabalik iyon ang trabaho kay Ivan para sa isang bagay na sinabi na
+   niyang gusto niyang makita lahat.
+6. **Ang naiwang hindi tinik ay tapos na.** Hindi na ito muling itinatanong sa
+   parehong run, at hindi ito ipinupuslit sa huling alon bilang "second chance".
+
+**Dalawa lang ang huminto sa alon:** naubos ang listahan, o sinabi ni Ivan na
+tama na (`Other` → *"tama na"*, *"ayoko na"*, *"yan na lang"*). **Ang alon na
+walang natik ay HINDI paghinto** — ang ibig sabihin niyon ay wala sa apat na iyon
+ang bagay, at may naghihintay pang lima. Tuloy ang susunod.
+
+⛔ **Huwag palakihin ang listahan para lang magkaroon ng alon.** Ang bilang ng
+alon ay resulta ng kung ilan ang tunay na bagay sa plano — hindi target. Isang
+skill lang ang pasado? Isang option, isang tanong, tapos. Ang pagpuno ng listahan
+para mukhang masinop ang hanap ay parehong kasinungalingan sa pagputol nito,
+nakaharap lang sa kabilang direksyon.
+
+### ⛔ WALANG `Lahat na` — apat na tunay na rekomendasyon ang laman ng bawat alon
+
+**Wala nang shortcut na option sa tanong na ito.** Walang `Lahat na`, walang
+`Lahat`, walang `Gamitin lahat`, walang bagong pangalan para sa parehong bagay.
+Apat na slot ang meron, at apat na skill ang nakaupo sa kanila.
+
+**Ang alon ang kapalit nito** — hindi ito tinanggal nang walang katumbas. Ang
+`Lahat na` ay may saysay noong **pinuputol** ang listahan sa tatlo: shortcut iyon
+papunta sa isang listahang hindi na mababawi. Ngayong naibibigay lahat, ang
+option na iyon ay kumakain ng slot na may laman — bawat alon ay nawawalan ng
+isang tunay na rekomendasyon para sa isang pindutan.
+
+- **Hindi ito ibinabalik "kapag mahaba ang listahan".** Doon ito pinakamasama:
+  labindalawang kandidato, tatlong slot kada alon, apat na tanong — kaysa tatlong
+  tanong kung apatan.
+- **Kung gusto niyang lahat, sasabihin niya.** Ang `Other` ay laging nandiyan sa
+  `AskUserQuestion`: *"lahat na"*, *"lahat"*, *"gamitin mo lahat"* → i-load ang
+  **buong listahan**, pati ang mga alon na hindi pa naitanong, at huwag nang
+  magtanong pa. Sabihin sa isang linya kung ilan ang na-load dahil doon.
+- **Hindi nag-iinstall ang shortcut na iyon.** Ang saklaw ay ang listahan ng step
+  6 lang — hindi ang hindi tinik sa step 5 (wala iyon sa disk, kaya wala iyon sa
+  listahan), hindi ang tinanggal ng ranking dahil hindi kandidato, at hindi ang
+  `verification-before-completion` (awtomatiko ito sa step 7).
 
 ## 7. Auto-load sa session
 
@@ -826,7 +894,7 @@ the approach — and ask whether to start.
 
 - `Sige, simulan mo na` — go
 - `Ayusin muna ang plano` — take the correction, revise, ask again
-- `Palitan ang skills` — back to step 6 with the same shortlist
+- `Palitan ang skills` — back to step 6, **alon 1 muli**, same ranked list, same tig-4 na alon hangga't naubos
 
 On go, **do the work — diretso.** Follow the loaded skills, follow the plan,
 report progress per the global rules. The plan's steps are the checklist:
@@ -851,6 +919,11 @@ failure.
   multi-skill repo prints `Found 341 skills`, exits **0**, and installs nothing.
   A zero exit code is not proof of an install — check
   `ls -d ~/.claude/skills/<name>` before believing it.
+- **Apat lang ang kasya sa isang tickbox — hindi apat ang cap ng rekomendasyon.**
+  Steps 5 and 6 ask in **waves** of four hangga't naubos ang listahan. Ang
+  pagpiga ng siyam na kandidato sa isang tanong ay nagtatapon ng lima nang hindi
+  nasasabi — na kapareho ng hindi na paghanap sa kanila. At **walang `Lahat na`**
+  na option na kumakain ng ikaapat na slot; `Other` ang daan kung gusto ang lahat.
 - **Two tickboxes, and neither substitutes for the other.** Step 5 gates the
   download, step 6 gates the use. Installing something Ivan unticked at step 5 is
   the worst failure this skill has, because it puts a file on his machine he said
