@@ -925,8 +925,31 @@ Skill({ skill: "verification-before-completion" })
 - **Hindi ito lumalabas sa alinmang tickbox** (step 5 o step 6). Hindi ito
   pinipili ni Ivan dahil hindi ito optional — ito ang panuntunan na "patunay
   bago sabihing tapos", at yun ay totoo sa **bawat** task.
+- **Tignan muna kung nasa makina — huwag ipagpalagay.** Isang linya, bago ang
+  bulk load:
+
+  ```sh
+  ls -d ~/.claude/skills/verification-before-completion
+  ```
+
 - **Kung hindi pa naka-install**, i-install muna — tahimik, walang tanong. Ito
   lang ang skill na pwedeng i-install nang hindi dumadaan sa tickbox ng step 5.
+  Sunod-sunod hanggang may tumama, at ang `ls` ang huling salita:
+
+  ```sh
+  npx skills add verification-before-completion          # 1. skills.sh
+  # 2. wala doon? skillsmp.com, tapos ang walong pinangalanang source ng step 4
+  ls -d ~/.claude/skills/verification-before-completion  # ← ito lang ang patunay
+  ```
+
+  ⛔ **Ang exit code 0 ay hindi patunay ng install** (tingnan ang Gotchas):
+  nagpi-print ang `npx skills add` ng `Found 341 skills`, lumalabas na **0**, at
+  walang na-install. Ang `ls` ang pinaniniwalaan, hindi ang exit code.
+
+  **Dumadaan pa rin ito sa audit ng step 5** — `node ~/.claude/skills/tulong/audit-skill.mjs`
+  sa bagong na-download na folder bago ito i-load. Ang nilalaktawan nito ay ang
+  **tickbox**, hindi ang audit: walang skill na na-load nang hindi nasuri, kahit
+  ito pa ang laging naka-load.
 - **Kung bigo ang install, o wala na ang pinanggalingan** (404, offline, tanggal
   na sa registry), **huwag nang pilitin.** Sabihin sa isang linya na wala ito,
   huwag i-load, at ituloy ang trabaho nang wala nito. Hindi ito dahilan para
@@ -960,7 +983,10 @@ point, so restating it is dead air. Start at step 1 of the plan and go.
 
 If the shortlist came back empty — nothing local fitted, and the remote hunt,
 which always runs, found nothing worth installing — say so plainly and run the
-plan directly with no skill loaded. A forced bad match is worse than none, and
+plan with **only `verification-before-completion` loaded**. Ang walang laman na
+shortlist ay hindi naglalaktaw sa step 7: tumatakbo pa rin ang bulk load, isang
+skill lang ang laman nito. "Walang na-load" ay hindi kailanman ang tamang
+resulta ng isang `/tulong` run. A forced bad match is worse than none, and
 doing the work with no skill at all is the ordinary case, not an admission of
 failure.
 
