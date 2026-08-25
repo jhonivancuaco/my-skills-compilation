@@ -753,11 +753,19 @@ Report the result in one line — `2 na-install: playwright-testing, stripe-webh
 `AskUserQuestion` with **`multiSelect: true`** — **isa kada alon, tig-4 na
 skill, walang shortcut na kumakain ng slot.** Every candidate from step 3 and
 every skill actually installed in step 5 goes in, at **lahat sila ay
-naibibigay**: kapag mahigit apat ang pumasa, isa pang tanong ang kasunod — hindi
-isang mas maikling listahan. Ivan ticks what he wants used and leaves out the
-rest.
+naibibigay**. Ivan ticks what he wants used and leaves out the rest.
 
-- Header `Skills`, question `Alin ang gagamitin? (alisan ng tick ang ayaw mo)`.
+🔴 **Ang hugis ng step na ito ay LOOP, hindi isang tanong.** Habang may natitira
+sa ranked na listahan, may susunod na tanong: apat, tapos apat, tapos ang
+natitira — 11 kandidato ay tatlong tanong, 20 ay lima. ⛔ **Hindi kailanman
+"apat lang ang kasya, kaya apat lang ang isusuggest".** Hindi pinuputol ang
+listahan para tumugma sa laki ng tickbox; ang tickbox ang inuulit para tumugma sa
+listahan.
+
+- Header `Skills`, question **may bilang ang bawat alon** —
+  `Alin ang gagamitin? (4 sa 11 — alon 1/3, alisan ng tick ang ayaw mo)`. Sa
+  huling alon lang ito nagiging `alon 3/3`, kaya alam ni Ivan sa bawat tanong
+  kung may kasunod pa.
 - **Order by recommendation, best first.** Put `(Recommended)` at the end of the
   label for the ones the plan actually needs, so the default read is obvious.
 - The `description` of each option is **why it is here** — the step of the plan
