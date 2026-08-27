@@ -23,14 +23,20 @@ Below, `<skill-dir>` is the folder this SKILL.md lives in.
 
 ---
 
-## Step 1 — Host or not?
+## Step 1 — Is this session the host?
 
 **Always ask this first.** Don't infer it, don't guess from whether the bus is
 running — the user may be starting a fresh team on a port that's still up.
 
-> "Are you the host for this session? The host acts as project manager — it
-> sets everything up, splits the work, and does an equal share itself.
-> Say no and I'll join an existing team instead."
+Ask about **this session**, never about the user. "Host" is a role a session
+holds, not something the person is; the user is not on the team at all. Only
+they know whether this is the first window or the third, which is why it's
+asked rather than worked out.
+
+> "Should this session be the host? The host session acts as project manager —
+> it starts the bus, writes the brief, splits the work, and carries a full
+> equal share of the coding itself. Say no and this session joins an existing
+> team instead."
 
 Then read `curl -sf --max-time 2 http://127.0.0.1:7777/health` as a sanity
 check. Host + bus already running means reuse it. Guest + nothing running means
