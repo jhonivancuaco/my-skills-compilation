@@ -1,0 +1,26 @@
+{
+  "skill_name": "dynamic-auditor",
+  "evals": [
+    {
+      "id": 0,
+      "name": "live-site-full-audit",
+      "prompt": "can you do a full SEO audit of https://www.rust-lang.org for me? i want the whole thing — whatever's broken technically, what's missing, and give it to me as something i can actually send to the team, not a wall of text in the terminal",
+      "expected_output": "A complete audit: skills discovered/installed/loaded first, a real crawl (site.json/pages.json/findings.json on disk), findings grouped by pillar with severities and per-finding fixes, and a published Artifact compiling it all. Should catch the www→apex redirect, the missing sitemap, missing canonicals and no JSON-LD.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "name": "codebase-audit-nextjs",
+      "prompt": "audit the SEO on this next.js project, it's in fixtures/acme-shop. we launched 3 weeks ago and google has indexed literally zero pages, i have no idea what's wrong",
+      "expected_output": "Finds the site-wide `robots: { index: false }` in app/layout.tsx as the critical cause of zero indexation, plus duplicate static titles on the product template, missing sitemap.ts/robots.ts, imgs with no alt, two H1s on the homepage, and the client-only blog route. Names the exact files. Ends with a published Artifact.",
+      "files": ["fixtures/acme-shop/"]
+    },
+    {
+      "id": 2,
+      "name": "vague-taglish-request",
+      "prompt": "pre tingnan mo nga yung https://example.com, parang walang traffic. ano kayang problema? gawan mo ako ng report na pwede kong ipakita sa client",
+      "expected_output": "Triggers the full flow despite the vague, Taglish phrasing and the absence of the word 'audit'. Measures rather than guesses (example.com has no robots.txt, no sitemap, no canonical, thin content, http does not redirect to https), is honest that ranking/traffic data was not available, and still delivers a client-ready Artifact.",
+      "files": []
+    }
+  ]
+}

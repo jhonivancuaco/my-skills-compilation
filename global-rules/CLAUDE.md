@@ -133,6 +133,32 @@ When a project deploys over SFTP/scp (no git), the server copy is the source of 
 
 Never edit a stale local file — pushing edits made on an outdated copy silently overwrites changes that only exist on the server.
 
+## 🔴 WALA NANG STAGING — LAHAT AY LIVE NA (mula 2026-09-01)
+**Isang environment na lang: LIVE.** Ang staging ay hindi na ginagamit — hindi na
+ito ang default na pinagta-trabahuhan, hindi na ito ang unang hakbang bago ang
+live, at hindi na ito ang pinipiliang target kapag hindi malinaw ang tanong.
+
+- **Ang live ang source of truth.** Doon pino-pull ang file, doon binu-build,
+  doon nagde-deploy, at doon vine-verify. Kapag may tinutukoy na "yung app",
+  "yung PWA", "yung API" — ang live iyon.
+- ⛔ **Huwag nang magtanong kung staging ba o live.** Wala nang pagpipilian, kaya
+  ang tanong ay dead air. Live agad.
+- ⛔ **Huwag nang mag-deploy sa staging** — walang upload, walang build, walang
+  restart doon, kahit "pang-test lang".
+- **Ang mga naunang panuntunan at nakasulat na doc na nagsasabing "staging muna"
+  ay LUMA na.** Kapag nagkabanggaan ang isang doc at ang panuntunang ito, ang
+  panuntunang ito ang panalo — at sabihin sa isang linya na stale ang doc.
+- **May natitira pang `staging/` folder sa disk at mga host na may staging na
+  pangalan.** Hindi ibig sabihin niyon ay buhay pa ang staging: mga labi lang
+  iyon. Huwag basta gamitin dahil lang nandiyan sila — ang path, ang host at ang
+  update URL ay sa live pumupunta.
+- **Kapag may config na nakatutok pa sa staging** (isang default na URL, isang
+  relative na path), **ituro sa live** bago patakbuhin — kung hindi, tahimik na
+  babalik sa staging ang app pagkatapos ng ilang segundo.
+
+**Ang test sa isang linya:** kung may pinipiling environment, wala nang pipiliin
+— **live**.
+
 ## Work that CHANGED something gets a report md — ask ONLY at the very END
 Work that actually changed something in a project — edits applied, a fix
 shipped, a deploy done — gets written up as a markdown report in the project's
