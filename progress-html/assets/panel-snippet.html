@@ -1,0 +1,75 @@
+<!--
+  ONE SECTION. Copy this, fill it in, delete what you don't use.
+
+  Placeholders:
+    {{N}}        section number  — from page_index.py --json → next_number
+    {{WHO}}      report owner    — ivan | edu | …
+    {{DATE}}     MM-DD-YYYY      — today
+    {{SLUG}}     kebab-case of the title, no leading number
+
+  The data-report stamp is not decoration. It is how the next run knows this
+  section is already published and must not be posted again.
+
+  The FIRST panel on a brand-new page also needs:  style="border-top:0;padding-top:0"
+-->
+
+<section class="panel" data-report="{{WHO}}/{{DATE}}#{{SLUG}}">
+  <div class="h-row">
+    <h2>{{N}}. Short sentence a client understands, not a commit message</h2>
+    <span class="datechip"><span class="dotmark"></span>Live</span>
+  </div>
+
+  <p class="lead">Two or three sentences. What the client can now do that they could not
+    do yesterday, or what was wrong and is now right. No file names, no function names,
+    no "refactored", no "endpoint".</p>
+
+  <!-- ── Screenshots ───────────────────────────────────────────────────────
+       .phone → 250px column, for a PWA capture
+       .wide  → 470px column, for a desktop capture
+       Two .wide side by side fill the row. A .phone next to a .wide is fine.
+
+       loading="eager" on the FIRST image of the page only; "lazy" on the rest.
+       width/height are required — without them the page jumps as shots load.
+  -->
+  <div class="shot-row">
+    <figure class="wide">
+      <img class="shot" src="shots/{{SLUG}}-1.png"
+           alt="Plain description of what the screenshot shows, for someone who cannot see it."
+           loading="lazy" decoding="async" width="470" height="300">
+      <figcaption>
+        <strong>What this shows.</strong>
+        <strong>1</strong> what the first callout points at.
+        <strong>2</strong> the second.
+        <strong>3</strong> the third.
+      </figcaption>
+    </figure>
+
+    <figure class="phone">
+      <img class="shot" src="shots/{{SLUG}}-2.png"
+           alt="Plain description."
+           loading="lazy" decoding="async" width="250" height="520">
+      <figcaption>The same thing on the phone app.</figcaption>
+    </figure>
+  </div>
+
+  <!-- ── Detail cards ──────────────────────────────────────────────────────
+       details.card.done → collapsible, for anything longer than two lines
+       div.card.static   → a single always-visible line
+
+       There is no .warn card on a finished-work page. If something is still
+       wrong, it does not belong here at all — it goes in the .md report.
+  -->
+  <div class="cards">
+    <details class="card done">
+      <summary><span class="dot">●</span><span class="ttl"><strong>A point worth expanding</strong></span><span class="sign"></span></summary>
+      <div class="body">
+        <p>The explanation. Written for someone who has never seen the code and never will.</p>
+      </div>
+    </details>
+
+    <div class="card static">
+      <span class="dot">●</span>
+      <p>A one-line note that needs no expanding.</p>
+    </div>
+  </div>
+</section>

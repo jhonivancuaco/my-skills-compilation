@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>PickleBallers — Progress update, {{LONG_DATE}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --blue:#0040E0; --lime:#C1F100; --coral:#CF3000;
+    --ink:#101426; --muted:#5B6178; --line:#C9D3E6; --line-soft:#E4E8F2;
+    --bg:#F8F9FC; --card:#FFFFFF;
+    --shadow:0 2px 10px rgba(0,64,224,.07);
+    --shot-line:#93A0BF;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Nunito Sans",system-ui,-apple-system,sans-serif;
+    font-size:17px; line-height:1.6;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px 80px}
+  header.hero{
+    background:linear-gradient(140deg,#0040E0 0%,#2B6BFF 100%);
+    color:#fff;padding:52px 0 44px;
+  }
+  header.hero .wrap{padding-bottom:0}
+  .eyebrow{
+    font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    font-weight:700;opacity:.85;margin:0 0 10px;
+  }
+  h1{font-family:Fredoka,sans-serif;font-weight:600;font-size:38px;line-height:1.15;margin:0 0 14px}
+  .hero p{margin:0 0 10px;max-width:880px;font-size:17px;opacity:.94}
+  .hero .meta{margin-top:22px;font-size:14px;opacity:.85}
+  .hero a{color:#fff}
+  h2{font-family:Fredoka,sans-serif;font-weight:600;font-size:26px;margin:8px 0 6px}
+  h3{font-family:Fredoka,sans-serif;font-weight:600;font-size:19px;margin:30px 0 10px}
+  .lead{color:var(--muted);margin:0 0 22px;max-width:900px}
+
+  .panel{display:block;scroll-margin-top:18px}
+  .panel + .panel{margin-top:52px;padding-top:44px;border-top:2px solid var(--line-soft)}
+
+  .cards{display:flex;flex-direction:column;gap:12px}
+  .card{background:var(--card);border:1.5px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+  details.card > summary{
+    list-style:none;cursor:pointer;
+    display:flex;gap:10px;align-items:flex-start;
+    padding:15px 18px;border-radius:14px;
+  }
+  details.card > summary::-webkit-details-marker{display:none}
+  details.card > summary:hover{background:#FAFBFE}
+  details.card[open] > summary{
+    border-bottom:1px solid var(--line-soft);
+    border-radius:14px 14px 0 0;background:#FAFBFE;
+  }
+  summary .dot{flex:0 0 auto;color:var(--blue);font-size:20px;line-height:1.35}
+  summary .ttl{flex:1;min-width:0}
+  summary .sign{
+    flex:0 0 auto;width:24px;height:24px;margin-top:2px;border-radius:50%;
+    background:#EDF1FA;color:var(--blue);
+    display:grid;place-items:center;font-weight:700;font-size:16px;line-height:1;
+  }
+  summary .sign::after{content:"+"}
+  details[open] > summary .sign::after{content:"\2013"}
+  .card .body{padding:18px}
+  .card .body > p:first-child{margin-top:0}
+  .card .body > p:last-child{margin-bottom:0}
+  .card.done > summary .dot{color:#1E9E5A}
+  .card.static{display:flex;gap:10px;padding:15px 18px}
+  .card.static .dot{flex:0 0 auto;color:var(--blue);font-size:20px;line-height:1.35}
+  .card.static p{margin:0}
+
+  figure{margin:0}
+  .shot{
+    display:block;height:auto;background:#fff;border-radius:14px;
+    border:2px solid var(--shot-line);
+    box-shadow:0 0 0 1px rgba(16,20,38,.06), 0 6px 18px rgba(16,20,38,.12);
+    cursor:zoom-in;
+  }
+  .shot:hover{border-color:var(--blue)}
+  .shot-row{display:flex;flex-wrap:wrap;gap:18px 20px;margin:2px 0 24px;align-items:flex-start}
+  .shot-row figure{max-width:100%}
+  .shot-row .phone{flex:0 1 250px}
+  .shot-row .wide{flex:0 1 470px}
+  .phone .shot{width:100%;max-width:250px}
+  .wide .shot{width:100%;max-width:470px}
+  figcaption{margin-top:9px;font-size:14px;color:var(--muted);max-width:470px;line-height:1.45}
+
+  .lightbox{
+    position:fixed;inset:0;z-index:100;display:none;
+    align-items:center;justify-content:center;padding:26px 18px 74px;
+    background:rgba(10,14,30,.86);
+  }
+  .lightbox.is-open{display:flex}
+  .lightbox img{
+    max-width:min(1180px,95vw);max-height:100%;
+    width:auto;height:auto;object-fit:contain;
+    background:#fff;border:2px solid #fff;border-radius:12px;
+    box-shadow:0 20px 60px rgba(0,0,0,.5);
+  }
+  .lightbox .lb-close{
+    position:absolute;top:14px;right:16px;
+    width:44px;height:44px;border-radius:50%;cursor:pointer;
+    border:2px solid #fff;background:rgba(255,255,255,.16);
+    color:#fff;font:inherit;font-size:22px;font-weight:700;line-height:1;
+  }
+  .lightbox .lb-close:hover{background:#fff;color:var(--ink)}
+  .lightbox .lb-cap{
+    position:absolute;left:0;right:0;bottom:0;
+    padding:14px 22px 18px;text-align:center;color:#fff;font-size:14px;line-height:1.45;
+  }
+
+  .note{
+    background:#fff;border:1.5px solid var(--line);border-left:4px solid var(--lime);
+    border-radius:12px;padding:16px 18px;margin:26px 0;box-shadow:var(--shadow);
+  }
+  .note strong{font-family:Fredoka,sans-serif;font-weight:600}
+  .note p{margin:0 0 10px}
+  .note p:last-child{margin-bottom:0}
+
+  table{border-collapse:collapse;width:100%;background:#fff;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);font-size:15px}
+  th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line-soft)}
+  th{background:#F1F4FB;font-weight:700}
+  tr:last-child td{border-bottom:0}
+  .table-scroll{overflow-x:auto}
+
+  .h-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:8px 0 6px}
+  .h-row h2{margin:0}
+  .datechip{
+    display:inline-flex;align-items:center;gap:7px;
+    font-size:13px;font-weight:700;line-height:1;
+    color:var(--blue);background:#E8EFFF;
+    border:1.5px solid #BFD1FF;border-radius:999px;padding:7px 13px;
+  }
+  .datechip .dotmark{width:7px;height:7px;border-radius:50%;background:var(--blue);flex:0 0 auto}
+  footer{margin-top:60px;padding-top:24px;border-top:1.5px solid var(--line);color:var(--muted);font-size:14px}
+
+  @media (max-width:900px){
+    .wrap{padding-left:22px;padding-right:22px}
+    h1{font-size:32px}
+  }
+  @media (max-width:640px){
+    body{font-size:16px}
+    h1{font-size:27px} h2{font-size:21px} h3{font-size:18px;margin-top:26px}
+    .wrap{padding-left:16px;padding-right:16px;padding-bottom:56px}
+    header.hero{padding:36px 0 30px}
+    .hero p{font-size:16px}
+    details.card > summary{padding:13px 14px;gap:8px}
+    .card .body{padding:14px}
+    .card.static{padding:13px 14px}
+    .note{padding:14px 15px;margin:20px 0}
+    .shot-row{gap:16px}
+    .shot-row .phone,.shot-row .wide{flex:1 1 100%}
+    .wide .shot{max-width:100%}
+    figcaption{font-size:13px}
+    .lightbox{padding:16px 12px 66px}
+    .datechip{font-size:12px;padding:6px 11px}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">PickleBallers progress report</p>
+    <h1>Progress update, {{LONG_DATE}}</h1>
+    {{HERO_PARAGRAPHS}}
+    <p class="meta"><a href="/{{PREV_DATE}}/progress.html">Previous day</a> · {{WEEKDAY}}, {{LONG_DATE}} ·
+       Everything on this page is finished and verified on the live staging site.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="h-row" style="margin-bottom:30px">
+    <h2>Updates</h2>
+    <span class="datechip"><span class="dotmark"></span>{{WEEKDAY}}, {{LONG_DATE}}</span>
+  </div>
+
+  <!-- PANELS GO HERE. The first one carries style="border-top:0;padding-top:0" -->
+{{PANELS}}
+
+</div>
+
+<footer>
+  <p>PickleBallers — progress update, {{LONG_DATE}}. Every screenshot on this page was taken from the
+     live staging site.</p>
+</footer>
+
+<div class="lightbox" id="lb" role="dialog" aria-modal="true" aria-label="Enlarged screenshot">
+  <button class="lb-close" type="button" aria-label="Close">&times;</button>
+  <img alt="">
+  <p class="lb-cap"></p>
+</div>
+<script>
+
+  // Any screenshot opens full size; Escape, the cross, or the backdrop closes it.
+  (function () {
+    var lb = document.getElementById('lb');
+    var img = lb.querySelector('img');
+    var cap = lb.querySelector('.lb-cap');
+    function close() { lb.classList.remove('is-open'); img.src = ''; }
+    document.querySelectorAll('.shot').forEach(function (s) {
+      s.addEventListener('click', function () {
+        img.src = s.getAttribute('src');
+        img.alt = s.getAttribute('alt') || '';
+        var fc = s.parentElement.querySelector('figcaption');
+        cap.textContent = fc ? fc.textContent : '';
+        lb.classList.add('is-open');
+      });
+    });
+    lb.addEventListener('click', function (e) { if (e.target === lb) close(); });
+    lb.querySelector('.lb-close').addEventListener('click', close);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  })();
+</script>
+</body>
+</html>

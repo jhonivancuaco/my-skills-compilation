@@ -472,6 +472,73 @@ ihinto o ipagpaliban ang task.
   components o design section sa `CLAUDE.md` ang repo, iyon ang sundin — ang
   skill ang nagbibigay ng pamantayan, hindi ng palette.
 
+## 🔴 REPORT AT DOKUMENTO AUTO-LOADS `unslop` + `em-dash` — hindi tinatanong
+**Bago isulat ang unang linya ng anumang report, doc o client-facing na teksto,
+naka-load na ang dalawang skill na ito.** Katulad ito ng design rule sa itaas:
+hindi tinatanong, hindi lumalabas sa tickbox, at hindi hinihintay na hilingin.
+
+```
+Skill({ skill: "unslop" })
+Skill({ skill: "em-dash" })
+```
+
+**Kailan ito nag-fire:** isang `reports/**/DD-report.md` na isinusulat o
+dinadagdagan, ang mga panel ng progress page, isang README o docs page, isang
+changelog, isang release note, at kahit anong prose na babasahin ng tao. Pati na
+rin kapag may **inaayos** na dating teksto, hindi lang kapag bago.
+
+**Ang partikular na skill ay depende sa uri ng teksto.** Dagdag ito sa dalawa sa
+itaas, hindi kapalit:
+
+| Ang sinusulat | Ang skill |
+|---|---|
+| report md, changelog, anumang prose na babasahin ng tao | `unslop` + `em-dash` lang |
+| technical docs, README, API reference, how-to guide | `docs-writing` |
+| hindi malinaw kung tutorial ba, how-to, reference o explanation | `writing-documentation-with-diataxis` |
+| mahabang teksto o policy na dapat maintindihan ng lahat | `readable-content` |
+| teksto sa loob mismo ng UI: button, error, empty state, toast | `ux-writing` |
+| tono ng brand na inilalapat sa bagong channel | `copywriting-tone-of-voice-creator` |
+
+**Ang mga panuntunan sa pagsulat na dala nila:**
+
+- **Walang em dash at walang en dash sa bagong teksto.** Palitan ng hyphen (`-`),
+  kuwit, tuldok o panaklong. Ito ang pinaka-madalas na tanda na AI ang sumulat,
+  at sinasabi ito ng parehong `unslop` at `em-dash`.
+- **Walang AI vocabulary:** crucial, delve, landscape, pivotal, showcase,
+  tapestry, testament, underscore, vibrant, "serves as", "stands as", "it is
+  important to note that", "not just X, it's Y". Payak na salita ang kapalit.
+- **Sentence case ang headings**, walang decorative emoji sa headings at bullets,
+  walang bold sa bawat proper noun, at straight quotes hindi curly.
+- **Huwag pilitin ang tatlo.** Kung dalawa lang ang totoo, dalawa ang isusulat.
+- **Ang huling pass bago i-save ang file ay ang self-audit ng `unslop`:** "ano
+  dito ang halatang AI ang sumulat?" Ayusin bago i-save, hindi pagkatapos
+  mabasa ng kliyente.
+
+**Ang mga hangganan nito:**
+
+- ⛔ **Hindi ito nagpapalit ng boses ni Ivan.** Ang plain-words na bulleted na
+  istilo sa *"Anong ginagawa nito?"* ang panalo pa rin sa lahat ng teksto para sa
+  kliyente. Ang `unslop` ay nag-aalis ng AI na amoy, hindi nagdadagdag ng
+  marketing na tono.
+- ⛔ **Walang retro-edit.** Ang mga lumang report, ang mga naunang progress page
+  at ang mga rule file mismo ay hindi binabalikan para linisin. Ang bagong
+  seksyon lang na isinusulat ngayon ang saklaw.
+- **Sa code, ang `em-dash` ay isang bagay lang ang sinasabi:** kahit kailan ay
+  walang em dash sa comment, string, identifier o config. Hyphen ang kapalit,
+  laging.
+
+**Kung wala ang skill sa machine, kunin ito** nang tahimik at walang tanong:
+tingnan muna ang `.claude/skills/` ng project, tapos ang `~/.claude/skills/`,
+tapos ang skills.sh (`npx skills add unslop`) at ang skillsmp.com. Kung bigo ang
+install o wala na ang pinanggalingan, sabihin sa **isang linya** at ituloy ang
+pagsulat nang wala nito. Hindi ito dahilan para ihinto ang task.
+
+**Isang linya lang ang sasabihin tungkol dito**, hal. `+ unslop + em-dash`.
+Huwag ipaliwanag at huwag gawing sariling talata.
+
+**Kailan ito hindi kailangan:** puro tanong lang na sinasagot sa chat, at ang
+code mismo. Ang chat reply ay hindi dokumento.
+
 ## Stay on task — no extras
 Do ONLY what the task asks. No unrelated work: no unprompted refactors, side fixes, extra explorations, or "while I'm here" improvements. Off-task thinking and work is slow and burns too many tokens. Before reading files, searching, or editing, check the action is directly needed for the current task; skip broad exploration when the target is already known. If something unrelated looks worth fixing, mention it in one sentence at the end instead of doing it.
 
