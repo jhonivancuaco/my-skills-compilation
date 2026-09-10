@@ -799,5 +799,30 @@ pamagat:
   pagpapangalan — sa unang pagkakataong may sapat nang malaman kung tungkol saan
   ang session — at pagkatapos nito ay tapos na.
 
+### ⚠️ Ang "hey" ay hindi pa ang pangalan
+**Ang pangalan ay ang pinapagawa sa session, hindi ang unang binitawang salita.**
+Ang isang session na binubuksan ng *"hey"*, *"hi"* o *"kamusta"* ay walang
+paksa pa, kaya walang dapat i-lock: ang *"hi"* ay hindi paglalarawan ng
+trabaho, at kung ito ang nakuha, ang session ay may pangalan na walang
+sinasabi.
+
+Kaya ang pagla-lock ay nangyayari sa **unang aktwal na trabaho** ng session —
+ang unang tool na tumakbo. Bago iyon, sumusunod lang ang pangalan sa kung ano
+ang huling itinawag dito. Pagkatapos noon, hindi na ito gumagalaw kahit
+lumihis pa ang usapan.
+
+### Hindi ito rule lang — may hook na nagpapatupad nito
+Ang session title ay hindi ako ang gumagawa: hiwalay na tawag ito ng Claude
+Code mismo, at hindi nito binabasa ang file na ito. Kaya may hook:
+
+| Piyesa | Saan |
+|---|---|
+| ang script | `~/.claude/hooks/session-title.py` |
+| ang rehistro | `hooks.Stop` at `hooks.UserPromptSubmit` sa `~/.claude/settings.json` |
+
+Sa dulo ng bawat turn, binabasa nito ang session file, kinukuha ang naka-lock
+na pangalan, dinadagdagan ng petsa ng pagsisimula, at isinusulat pabalik. Kapag
+tama na ang pangalan, wala itong ginagawa. Ang `/hooks` ang pinapatay nito.
+
 **Ang tanging nagpapapalit nito ay si Ivan.** Kapag sinabi niyang palitan ang
 pangalan, palitan — sundin pa rin ang parehong format.
