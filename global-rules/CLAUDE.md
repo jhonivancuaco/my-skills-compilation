@@ -755,3 +755,49 @@ alinmang report** — hindi sa `DD-report.md`, hindi sa `-ignore`, hindi sa
   housekeeping lang ito: tahimik na ginagawa, tahimik na tinatapos.
 - **Nananatili pa rin ito sa progress percentage**, at may verification pa rin
   (kumpirmahin ang push) — hindi lang ito sinusulat sa report.
+
+## 🔴 ANG SESSION TITLE AY FIXED — ISANG BESES LANG ITO PINAPANGALANAN
+**Isang session, isang pangalan, buong buhay ng session na iyon.** Kapag may
+naibigay nang title ang isang session, hindi na ito pinapalitan — hindi kapag
+lumipat ang usapan sa ibang file, hindi kapag may bagong task na dumating, at
+hindi kapag mas "angkop" na ang ibang pangalan sa huling ginawa.
+
+**Ang dahilan ay simple: ginagamit ang title para hanapin ang session.** Kapag
+ang tinawag na *"September 10: Owner console spacing"* kanina ay biglang naging
+*"September 10: APK build"* mamaya, wala nang mahahanap ang naghahanap ng una —
+mukhang nawala ang session, gayong nandiyan lang ito at ibang pangalan na ang
+suot. Ang isang mali pero matatag na pangalan ay mas magaan kaysa sa isang tama
+pero paiba-ibang pangalan.
+
+### Ang format: `Month N: Session Title`
+Buong pangalan ng buwan, espasyo, ang araw na numero, tutuldok, tapos ang
+pamagat:
+
+| Use | Not |
+|---|---|
+| `September 10: Owner console topbar spacing` | `Owner console topbar spacing` — walang petsa |
+| `September 10: Fix venue directory counts` | `Sept 10: ...`, `Sep 10: ...`, `09/10: ...` |
+| `September 3: APK live build` | `September 03: ...` — walang leading zero sa araw |
+| `October 1: Payment webhook secret` | `1 October: ...`, `2026-10-01: ...` |
+
+- **Buong buwan, hindi paikli.** `January`, `February`, … `December`.
+- **Walang leading zero sa araw** — `September 3`, hindi `September 03`.
+- **Walang taon.** Ang mga session ay binabasa sa loob ng araw o linggo; ang
+  taon ay ingay lang sa isang listahan.
+- **Ang petsa ay ang araw na SINIMULAN ang session**, hindi ang araw ngayon.
+  Ang isang session na tumawid ng hatinggabi ay hindi nagpapalit ng pangalan.
+- **Ang title mismo ay 3–6 na salita**, sentence case, plain words — kung ano
+  ang trabaho, hindi kung paano ito ginawa. Walang emoji at walang percentage.
+
+### ⛔ Kailan ito HINDI pinapalitan
+- **Hindi kapag may bagong task na idinagdag.** Ang unang task ang nagbibigay ng
+  pangalan; ang mga sumunod ay sumasakay lang doon. (Tingnan ang *NEW TASKS ADD
+  TO THE QUEUE* — ang bagong task ay hindi nagiging bagong session.)
+- **Hindi kapag lumawak o lumihis ang usapan.**
+- **Hindi para gawing mas eksakto o mas maganda ang luma.**
+- **Hindi awtomatiko, kahit kailan.** Isang beses lang tumatakbo ang
+  pagpapangalan — sa unang pagkakataong may sapat nang malaman kung tungkol saan
+  ang session — at pagkatapos nito ay tapos na.
+
+**Ang tanging nagpapapalit nito ay si Ivan.** Kapag sinabi niyang palitan ang
+pangalan, palitan — sundin pa rin ang parehong format.
