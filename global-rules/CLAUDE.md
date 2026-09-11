@@ -799,17 +799,40 @@ pamagat:
   pagpapangalan — sa unang pagkakataong may sapat nang malaman kung tungkol saan
   ang session — at pagkatapos nito ay tapos na.
 
-### ⚠️ Ang "hey" ay hindi pa ang pangalan
-**Ang pangalan ay ang pinapagawa sa session, hindi ang unang binitawang salita.**
-Ang isang session na binubuksan ng *"hey"*, *"hi"* o *"kamusta"* ay walang
-paksa pa, kaya walang dapat i-lock: ang *"hi"* ay hindi paglalarawan ng
-trabaho, at kung ito ang nakuha, ang session ay may pangalan na walang
-sinasabi.
+### ⚠️ Ang mensahe ay hindi ang pangalan
+**Ang pangalan ay ang pinapagawa sa session, hindi ang tinipa para simulan
+ito.** Dalawang beses nang nangyari ang parehong pagkakamali sa magkaibang
+anyo:
 
-Kaya ang pagla-lock ay nangyayari sa **unang aktwal na trabaho** ng session —
-ang unang tool na tumakbo. Bago iyon, sumusunod lang ang pangalan sa kung ano
-ang huling itinawag dito. Pagkatapos noon, hindi na ito gumagalaw kahit
-lumihis pa ang usapan.
+| Tinipa | Naging pangalan | Ang totoong trabaho |
+|---|---|---|
+| `hi` | `hi` | wala pa, greeting pa lang |
+| `may kulang dito` (may screenshot) | `September 11: May kulang dito` | player v2 dashboard, venue booking details, events at open play |
+
+Hindi lang pala greeting ang problema. **Anumang maikling mensahe ay nagiging
+pangalan kung iyon lang ang nakikita** - isang screenshot at tatlong salita ang
+buong konteksto, kaya ang mensahe mismo ang ibinabalik bilang pangalan. Wala
+itong sinasabi sa kahit sinong babasa nito bukas.
+
+Kaya tatlong bagay ang kailangan bago mag-lock ang pangalan:
+
+1. **May aktwal nang trabaho** - tumakbo na ang hindi bababa sa tatlong tool.
+   Ang isang session na nagbabasa pa lang ay walang paksa pa.
+2. **Hindi ito ulit ng mensahe.** Kapag ang pangalan ay siya mismong maikling
+   mensahe (apat na salita pababa), tinatanggihan ito. Ang pangalang hango sa
+   mahabang utos ay tanggap: *"pakiayos yung venue directory counts, mali yung
+   bilang"* → **`Venue directory counts`**, maayos iyon.
+3. **Dalawang salita pataas.** Ang `Spacing` ay hindi pangalan, ang
+   `Owner console spacing fixes` ay pangalan.
+
+Habang wala pa ang tatlo, **sumusunod lang ang pangalan** sa kung ano ang huling
+itinawag dito. Sa sandaling makumpleto ang tatlo, doon ito nag-lock at hindi na
+gumagalaw kahit lumihis pa ang usapan.
+
+⛔ **Huwag paaga-ahin ang lock para lang maagang tumigil ang pagbabago.** Iyon
+ang unang bersyon ng panuntunang ito, at ang napala ay isang session na
+habambuhay nang tinatawag na *"May kulang dito"*. Mas mabuti ang pangalang
+gumagalaw nang ilang minuto kaysa sa maling pangalang naka-bato na.
 
 ### Hindi ito rule lang — may hook na nagpapatupad nito
 Ang session title ay hindi ako ang gumagawa: hiwalay na tawag ito ng Claude
@@ -820,9 +843,15 @@ Code mismo, at hindi nito binabasa ang file na ito. Kaya may hook:
 | ang script | `~/.claude/hooks/session-title.py` |
 | ang rehistro | `hooks.Stop` at `hooks.UserPromptSubmit` sa `~/.claude/settings.json` |
 
-Sa dulo ng bawat turn, binabasa nito ang session file, kinukuha ang naka-lock
-na pangalan, dinadagdagan ng petsa ng pagsisimula, at isinusulat pabalik. Kapag
-tama na ang pangalan, wala itong ginagawa. Ang `/hooks` ang pinapatay nito.
+Sa dulo ng bawat turn, binabasa nito ang session file, hinahanap ang unang
+pangalang pumasa sa tatlong pagsubok sa itaas, dinadagdagan ng petsa ng
+pagsisimula, at isinusulat pabalik. Kapag tama na ang pangalan, wala itong
+ginagawa. Ang `/hooks` ang pinapatay nito.
+
+⚠️ **Hindi nito naaabot ang mga session na bukas na bago ito na-install.** Ang
+settings ay binabasa sa startup, kaya ang bagong session lang ang may hook.
+Ang lumang session na may maling pangalan ay `/rename` na lang - hindi na ito
+babalikan ng hook.
 
 **Ang tanging nagpapapalit nito ay si Ivan.** Kapag sinabi niyang palitan ang
 pangalan, palitan — sundin pa rin ang parehong format.
