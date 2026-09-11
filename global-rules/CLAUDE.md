@@ -834,24 +834,5 @@ ang unang bersyon ng panuntunang ito, at ang napala ay isang session na
 habambuhay nang tinatawag na *"May kulang dito"*. Mas mabuti ang pangalang
 gumagalaw nang ilang minuto kaysa sa maling pangalang naka-bato na.
 
-### Hindi ito rule lang — may hook na nagpapatupad nito
-Ang session title ay hindi ako ang gumagawa: hiwalay na tawag ito ng Claude
-Code mismo, at hindi nito binabasa ang file na ito. Kaya may hook:
-
-| Piyesa | Saan |
-|---|---|
-| ang script | `~/.claude/hooks/session-title.py` |
-| ang rehistro | `hooks.Stop` at `hooks.UserPromptSubmit` sa `~/.claude/settings.json` |
-
-Sa dulo ng bawat turn, binabasa nito ang session file, hinahanap ang unang
-pangalang pumasa sa tatlong pagsubok sa itaas, dinadagdagan ng petsa ng
-pagsisimula, at isinusulat pabalik. Kapag tama na ang pangalan, wala itong
-ginagawa. Ang `/hooks` ang pinapatay nito.
-
-⚠️ **Hindi nito naaabot ang mga session na bukas na bago ito na-install.** Ang
-settings ay binabasa sa startup, kaya ang bagong session lang ang may hook.
-Ang lumang session na may maling pangalan ay `/rename` na lang - hindi na ito
-babalikan ng hook.
-
 **Ang tanging nagpapapalit nito ay si Ivan.** Kapag sinabi niyang palitan ang
 pangalan, palitan — sundin pa rin ang parehong format.
