@@ -569,6 +569,63 @@ These four are one habit: **the smallest correct thing that fully does the job.*
 does it already exist somewhere?* If it isn't needed — skip it. If it exists —
 reuse it.
 
+## Ang pang-test na nagawa ay nagiging tool - hindi na ito inuulit sa umpisa
+
+**Kapag may isinulat o ginawang pang-test para matapos ang isang task, hindi ito
+itinatapon pagkatapos.** Ginagawa itong tool na may pangalan, nasa loob ng
+project, at kayang patakbuhin ulit ng kahit sino sa susunod na session nang
+hindi na isinusulat muli. Ang isang heredoc na na-paste sa terminal ay nawawala
+kasama ng scrollback, kaya ang susunod na nangangailangan nito ay nagsisimula
+sa wala - iyon mismo ang paulit-ulit na inaalis ng panuntunang ito.
+
+Tatlo ang uri, at pareho ang trato sa kanila:
+
+- **Seeder** - ang gumagawa ng data na kailangan para may makita o masubukan.
+- **Shredder** - ang nag-aalis ng ginawa ng seeder at nagbabalik sa dati.
+- **Action o check** - ang curl, ang script, ang probe na nagpapatunay na gumagana.
+
+| Use | Not |
+|---|---|
+| isang naka-pangalang file sa loob ng repo | isang `node -e` heredoc na nawawala kasama ng terminal |
+| dry run ang default, `--apply` bago sumulat | script na diretsong sumusulat sa unang takbo |
+| bawat seeder ay may kapares na `--remove` o `--revert` | seeder na walang panlinis |
+| matatakbo nang paulit-ulit, pareho ang resulta | script na kapag inulit ay dumodoble ang rows |
+| nakasulat ang eksaktong utos sa header ng file | kailangang basahin ang buong code para malaman kung paano patakbuhin |
+
+- **Hanapin muna ang meron bago gumawa ng bago.** Ang unang hakbang ay isang
+  `ls` sa folder ng mga script, hindi ang unang linya ng bagong file. Ang
+  `seed-venues-2` sa tabi ng `seed-venues` ang mismong sakit na inaalis nito.
+  (Pareho ito sa DRY sa *How the work is done* sa itaas.)
+- **Idempotent.** Upsert sa natural key, hindi delete-tapos-insert. Simple ang
+  pagsubok: patakbuhin nang dalawang beses na magkasunod, dapat pareho ang bilang
+  ng rows at parehong exit 0.
+- **Deterministic.** Fixed na seed at fixed na petsa, hindi `Math.random()` at
+  hindi `Date.now()`. Ang script na ibang resulta kada takbo ay hindi tool.
+- **Walang totoong data na kinokopya papasok sa isang fixture.** Palitan ang
+  pangalan, email at numero bago gamitin sa pagsubok.
+
+### Pati ang ginawa sa kamay - account, booking, subscription
+**Ang test data ay hindi lang ang galing sa script.** Ang account na ginawa para
+makapasok, ang booking na sinubukan, ang subscription na tiningnan kung
+nagre-renew - rows lahat iyon sa database, at nananatili sila roon pagkatapos
+isara ang browser. May kapares din silang shredder.
+
+- **Itala habang ginagawa** - email, reference number, id. Hindi ito maaalala
+  pagkatapos ng isang oras ng ibang trabaho.
+- **Burahin sa parehong session**, bago ang huling mensahe. Hindi "next time".
+- **Kapag paulit-ulit ang ganoong test**, ang paglilinis ay nagiging naka-pangalang
+  script din - doon pumapasok ang unang kalahati ng panuntunang ito.
+- **Sabihin sa final message** kung ano ang ginawa at kung ano ang inalis.
+- ⚠️ **Sa isang live na sistema, walang awtomatikong naglilinis nito.** Ang isang
+  naiwang test booking ay mukhang kuha ng totoong tao at walang alarm na tutunog.
+
+**Hindi ito lisensya para mag-over-engineer.** Nag-fire lang ito kapag may
+ginawa nang pang-test para sa isang task. Walang test framework na itinatayo
+nang walang humihingi, at walang abstraction para sa isang caller.
+
+**Ang test sa isang linya:** kailangan ba itong isulat o ulitin muli ng susunod
+na session? Kung oo, hindi pa ito tapos.
+
 ## "Anong ginagawa nito?" — answer plainly, as a numbered-feel bullet list
 When the user asks **what something is or what it does**, the answer is written
 for a **grade-school student**, never for an engineer. Plain words, short lines,
