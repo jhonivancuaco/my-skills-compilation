@@ -210,6 +210,13 @@ skill)`. Huwag ipaliwanag, huwag gawing sariling talata, at huwag ipatanong.
 ⛔ **Walang plan skill para sa isang tanong.** Kung walang trabahong gagawin —
 puro tanong lang — walang plano, kaya walang plan skill na lo-load.
 
+⛔ **`writing-plans` ay para lang sa komplikado o malawak na task** (Ivan,
+2 October 2026). Maraming hakbang na magkakadugtong, maraming file, malabong
+saklaw, o feature/refactor na tumatawid ng module → i-load. Commit, push,
+rename, isang kulay, isang bug na alam na ang lokasyon, o anumang kayang tapusin
+sa ilang tool call → **huwag**, at isang maikling plano sa isip lang ang sapat.
+Kapag lumaki ang task habang ginagawa, saka ito i-load.
+
 ### 2b. Ngayon, isulat ang plano
 
 Write the plan first. The plan is what makes the skill search accurate: you
